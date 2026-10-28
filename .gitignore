@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+.pytest_cache/
+coverage/
+*.log
+dist/
+.ruff_cache/
+.mypy_cache/
+.cache/
+verification/private/
+verification/
+WORK_LOG.md
+IMPLEMENTATION_PLAN.md
+docs/Month_End_Research_and_PRD.docx

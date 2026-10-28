@@ -1,0 +1,45 @@
+name: tests
+on:
+  push:
+  pull_request:
+jobs:
+  unit:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - {os: ubuntu-latest, python-version: '3.9'}
+          - {os: ubuntu-latest, python-version: '3.12'}
+          - {os: ubuntu-latest, python-version: '3.14'}
+          - {os: macos-latest, python-version: '3.12'}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python scripts/validate_package.py
+      - run: python -m ruff check skills/month-end/scripts scripts tests
+      - if: matrix.python-version != '3.9'
+        run: python -m mypy
+      - if: matrix.python-version != '3.9'
+        run: python -m bandit -q -r skills/month-end/scripts scripts -ll
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/release_check.py
+      - run: python scripts/build_release.py --output dist
+      - run: python skills/month-end/scripts/monthend.py --help
+      - run: python skills/month-end/scripts/compare_runs.py examples/benchmark_runs.csv
+  tokenizer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-tokenizer.txt
+      - name: Provision official tokenizer vocabulary
+        run: curl --fail --location https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken --output "$RUNNER_TEMP/cl100k_base.tiktoken"
+      - name: Verify exact offline text counts
+        env:
+          MONTH_END_TEST_CL100K_VOCAB: ${{ runner.temp }}/cl100k_base.tiktoken
+        run: python -m unittest discover -s tests -p test_token_count.py -v

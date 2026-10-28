@@ -1,0 +1,391 @@
+{
+  "checked_on": "2026-10-28",
+  "format_version": 1,
+  "mechanisms": [
+    {
+      "id": "targeted_retrieval",
+      "local_evidence": "Exact-source and bounded retrieval regression tests",
+      "outcome_status": "mechanism implemented; whole-task economics unmeasured",
+      "source_ids": [
+        "S02",
+        "S14",
+        "S29"
+      ]
+    },
+    {
+      "id": "diagnostic_receipts",
+      "local_evidence": "Huge-line, warning, middle-error and exit-code tests; deterministic terminal-byte demo",
+      "outcome_status": "local terminal-byte behavior measured; model savings unmeasured",
+      "source_ids": [
+        "S15",
+        "C01"
+      ]
+    },
+    {
+      "id": "cache_stability",
+      "local_evidence": "Provider-specific guidance only",
+      "outcome_status": "host/API controls are not changed by the skill",
+      "source_ids": [
+        "S03",
+        "S06",
+        "S09"
+      ]
+    },
+    {
+      "id": "task_continuity",
+      "local_evidence": "Optional checkpoint template",
+      "outcome_status": "resumption quality requires a live behavioral evaluation",
+      "source_ids": [
+        "S05",
+        "S07"
+      ]
+    },
+    {
+      "id": "success_adjusted_evaluation",
+      "local_evidence": "Paired evaluator and runner checks",
+      "outcome_status": "real grading, usage and actual billed cost are required for product claims",
+      "source_ids": [
+        "S08",
+        "S15",
+        "S17",
+        "S18",
+        "S19"
+      ]
+    }
+  ],
+  "method": "Primary page retrieval; paper title/venue or revision and abstract review; project/community identity and limitation review. No experiment replication.",
+  "registry_version": "2026-10-28.1",
+  "review_interval_days": 90,
+  "sources": [
+    {
+      "checked_on": "2026-10-28",
+      "id": "S01",
+      "independently_reproduced": false,
+      "review_scope": "Original article unavailable to retrieval; use current official context/cost guidance instead.",
+      "status": "unavailable",
+      "tier": "official",
+      "title": "Maximizing the value of your Claude Code sessions",
+      "url": "https://claude.com/resources/articles/maximizing-the-value-of-your-claude-code-sessions"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S02",
+      "independently_reproduced": false,
+      "review_scope": "Context selection and lifecycle mechanisms; no Month End outcome proof.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Effective context engineering for AI agents",
+      "url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S03",
+      "independently_reproduced": false,
+      "review_scope": "Provider cache behavior; not a control exposed by a Markdown skill.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Prompt caching",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S04",
+      "independently_reproduced": false,
+      "review_scope": "Tool-context guidance; API/harness controls are separate from skill instructions.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Manage tool context",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/manage-tool-context"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S05",
+      "independently_reproduced": false,
+      "review_scope": "Lifecycle alternatives and their tradeoffs; not a Month End reproduction.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Context engineering: memory, compaction, and tool clearing",
+      "url": "https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S06",
+      "independently_reproduced": false,
+      "review_scope": "Stable reusable context and compaction can affect cache reuse; model-specific rules apply.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Prompt caching",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-caching"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S07",
+      "independently_reproduced": false,
+      "review_scope": "Native Responses compaction is configured by API/harness owners.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Compaction",
+      "url": "https://developers.openai.com/api/docs/guides/compaction"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S08",
+      "independently_reproduced": false,
+      "review_scope": "Define success, capture behavior, and grade observable outcomes.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Testing Agent Skills Systematically with Evals",
+      "url": "https://developers.openai.com/blog/eval-skills"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S09",
+      "independently_reproduced": false,
+      "review_scope": "Gemini implicit caching behavior; no inference about Antigravity billing.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Context caching",
+      "url": "https://ai.google.dev/gemini-api/docs/caching"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S10",
+      "independently_reproduced": false,
+      "review_scope": "Manifest and package format, including optional compatibility metadata.",
+      "status": "verified",
+      "tier": "standard",
+      "title": "Agent Skills specification",
+      "url": "https://agentskills.io/specification"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S11",
+      "independently_reproduced": false,
+      "review_scope": "Task-specific prompt compression; does not establish safe exact-code compression.",
+      "status": "abstract_reviewed",
+      "tier": "peer_reviewed",
+      "title": "LLMLingua: Compressing Prompts for Accelerated Inference of Large Language Models",
+      "url": "https://aclanthology.org/2023.emnlp-main.825/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S12",
+      "independently_reproduced": false,
+      "review_scope": "Long-context task performance and compression under its evaluated conditions.",
+      "status": "abstract_reviewed",
+      "tier": "peer_reviewed",
+      "title": "LongLLMLingua: Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression",
+      "url": "https://aclanthology.org/2024.acl-long.91/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S13",
+      "independently_reproduced": false,
+      "review_scope": "Extractive prompt compression; transfer to exact source editing is unproven.",
+      "status": "abstract_reviewed",
+      "tier": "peer_reviewed",
+      "title": "LLMLingua-2: Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression",
+      "url": "https://aclanthology.org/2024.findings-acl.57/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S14",
+      "independently_reproduced": false,
+      "review_scope": "Placement-sensitive retrieval in the tested tasks and models.",
+      "status": "abstract_reviewed",
+      "tier": "peer_reviewed",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts",
+      "url": "https://aclanthology.org/2024.tacl-1.9/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S15",
+      "independently_reproduced": false,
+      "review_scope": "Reports a counterexample to equating delivered token reduction with billed savings.",
+      "status": "abstract_reviewed",
+      "tier": "preprint",
+      "title": "Token Reduction Is Not Cost Reduction",
+      "url": "https://arxiv.org/abs/2607.12161v5"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S16",
+      "independently_reproduced": false,
+      "review_scope": "Instruction/routing overhead and progressive-disclosure optimization in its sample.",
+      "status": "abstract_reviewed",
+      "tier": "preprint",
+      "title": "SkillReducer: Optimizing LLM Agent Skills for Token Efficiency",
+      "url": "https://arxiv.org/abs/2603.29919v2"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S17",
+      "independently_reproduced": false,
+      "review_scope": "Most sampled skills did not significantly improve outcomes; avoid broad universal claims.",
+      "status": "abstract_reviewed",
+      "tier": "preprint",
+      "title": "SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?",
+      "url": "https://arxiv.org/abs/2603.15401v2"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S18",
+      "independently_reproduced": false,
+      "review_scope": "Adaptive external-controller results under its own tested conditions.",
+      "status": "abstract_reviewed",
+      "tier": "preprint",
+      "title": "TokenEconomizer: Experience-Driven Black-Box Cost Control for Coding Agents",
+      "url": "https://arxiv.org/abs/2610.22732v1"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S19",
+      "independently_reproduced": false,
+      "review_scope": "Separates tool-schema filtering, content compression and history summarization.",
+      "status": "abstract_reviewed",
+      "tier": "preprint",
+      "title": "An Empirical Cost Attribution of Context-Compression Gateways in Multi-Turn Coding Agents",
+      "url": "https://arxiv.org/abs/2609.22114v1"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S20",
+      "independently_reproduced": false,
+      "review_scope": "Repository identity and stated command-output proxy purpose; claims not independently reproduced.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "RTK",
+      "url": "https://github.com/rtk-ai/rtk"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S21",
+      "independently_reproduced": false,
+      "review_scope": "Agent-neutral lean-work skill and setup audit; not causal performance evidence.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "Token Saver",
+      "url": "https://www.skills.sh/otnc/skills_ai-agent-saving-tech/token-saver"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S22",
+      "independently_reproduced": false,
+      "review_scope": "Collection and modular-reference structure; no independent outcome validation.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "Agent Skills for Context Engineering",
+      "url": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S23",
+      "independently_reproduced": false,
+      "review_scope": "Public skill-package examples; repository identity verified.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "Anthropic Skills",
+      "url": "https://github.com/anthropics/skills"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S24",
+      "independently_reproduced": false,
+      "review_scope": "Installer/distribution tooling; Month End remote install remains pending publication.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "Vercel Skills CLI",
+      "url": "https://github.com/vercel-labs/skills"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S25",
+      "independently_reproduced": false,
+      "review_scope": "Skill/workflow framework; ergonomics reference, not proof of savings.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "Superpowers",
+      "url": "https://github.com/obra/superpowers"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S26",
+      "independently_reproduced": false,
+      "review_scope": "Multi-host harness/skill project; no claims independently reproduced here.",
+      "status": "identity_reviewed",
+      "tier": "implementation",
+      "title": "Everything Claude Code / ECC",
+      "url": "https://github.com/affaan-m/ECC"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S27",
+      "independently_reproduced": false,
+      "review_scope": "Author self-report; local output/usage figures do not establish billed cost per successful task.",
+      "status": "anecdote_reviewed",
+      "tier": "community",
+      "title": "I saved 10M tokens (89%) on my Claude Code sessions with a CLI proxy",
+      "url": "https://www.reddit.com/r/ClaudeAI/comments/1r2tt7q/i_saved_10m_tokens_89_on_my_claude_code_sessions/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S28",
+      "independently_reproduced": false,
+      "review_scope": "Community comparison with disclosed competitive involvement; not an independent Month End evaluation.",
+      "status": "anecdote_reviewed",
+      "tier": "community",
+      "title": "I benchmarked 5 token saving tools across Codex and Claude code",
+      "url": "https://www.reddit.com/r/ClaudeAI/comments/1viyokr/i_benchmarked_5_token_saving_tools_across_codex/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S29",
+      "independently_reproduced": false,
+      "review_scope": "Scoped descriptions and progressive disclosure; model-specific advice is not universal.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Rethinking skills and prompts for GPT-6 Astra",
+      "url": "https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S30",
+      "independently_reproduced": false,
+      "review_scope": "Project skill path and progressive disclosure; global paths differ by surface.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Antigravity agent skills",
+      "url": "https://antigravity.google/docs/skills?tab=ide"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "S31",
+      "independently_reproduced": false,
+      "review_scope": "Skill package/API integration boundaries; no changes made to host API settings.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Skills in OpenAI API",
+      "url": "https://developers.openai.com/api/docs/guides/tools-skills"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "C01",
+      "independently_reproduced": false,
+      "review_scope": "Single huge-line hazard is a useful fixture idea. The post also suggests skipping checks; Month End does not adopt that rule or validate its percentage.",
+      "status": "anecdote_reviewed",
+      "tier": "community",
+      "title": "I cut Codex token usage about 50% with one AGENTS.md rule",
+      "url": "https://www.reddit.com/r/codex/comments/1t6iulo/i_cut_codex_token_usage_50_with_one_agentsmd_rule/"
+    },
+    {
+      "checked_on": "2026-10-28",
+      "id": "A01",
+      "independently_reproduced": false,
+      "review_scope": "Current official replacement for unavailable S01: context inspection, task boundaries and compaction.",
+      "status": "verified",
+      "tier": "official",
+      "title": "Manage costs effectively",
+      "url": "https://code.claude.com/docs/en/costs"
+    }
+  ]
+}

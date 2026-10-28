@@ -1,0 +1,23 @@
+name: Platform compatibility
+description: Report skill discovery or invocation behavior in a specific host.
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Host version, Month End version and operating system
+    validations:
+      required: true
+  - type: input
+    id: scope
+    attributes:
+      label: Install location and scope
+      description: Use a redacted relative path rather than a private home-directory path.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Discovery and invocation evidence
+      description: Describe expected behavior, actual behavior and the smallest harmless reproduction.
+    validations:
+      required: true

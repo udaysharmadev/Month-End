@@ -1,0 +1,2 @@
+# Optional exact local text counting; no downloads are performed by the counter.
+tiktoken==0.14.0

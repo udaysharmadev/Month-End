@@ -1,0 +1,22 @@
+{
+  "billed_cost_usd": null,
+  "displayed_command_body_bytes": 151,
+  "entire_wrapper_stdout_bytes": 270,
+  "excerpt_stdout": "     1 | def validate_payment(currency):\n     2 |     return currency == \"INR\"\n[month-end] source=<DEMO_DIR>/payments.py matched_lines=1 shown_matches=1 exact=true\n",
+  "failing_exit": 9,
+  "failing_stdout": "ERROR: invalid payment currency\n[month-end] exit=9 kind=tests raw_bytes=32 displayed_bytes=32 lines=1 excerpt=false profile=generic filter=bounded\n[month-end] Command FAILED. Diagnostics above are an excerpt, NOT a substitute for complete error analysis.\n[month-end] For full evidence rerun with --log PATH or execute command unwrapped.\n",
+  "format_version": 1,
+  "helper_version": "month-end 1.0.0-rc.1",
+  "input": "500 passing fixture lines and one real failing child command",
+  "limitations": [
+    "No model called",
+    "No provider tokens measured",
+    "No task-success or billed-savings claim"
+  ],
+  "locate_stdout": "./payments.py\n",
+  "passing_exit": 0,
+  "passing_stdout": "PASS case_000\nPASS case_001\nPASS case_002\nPASS case_493\nPASS case_494\nPASS case_495\nPASS case_496\nPASS case_497\nPASS case_498\nPASS case_499\n500 passed\n[month-end] exit=0 kind=tests raw_bytes=7011 displayed_bytes=151 lines=501 excerpt=true profile=generic filter=bounded\n",
+  "provider_usage": null,
+  "raw_command_bytes": 7011,
+  "scope": "deterministic local terminal-output demonstration; not a model benchmark"
+}

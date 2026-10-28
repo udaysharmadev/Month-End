@@ -1,0 +1,7 @@
+task_id,arm,success,cost_usd,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens,turns,wall_seconds
+synthetic-01,baseline,1,0.44,50000,4000,30000,8000,10,200
+synthetic-01,month-end,1,0.42,45000,3900,29500,8000,9,190
+synthetic-02,baseline,1,0.68,74000,6400,45000,9000,13,330
+synthetic-02,month-end,0,0.50,50000,4800,32000,9000,10,280
+synthetic-03,baseline,1,0.30,27000,2100,16000,5500,7,110
+synthetic-03,month-end,1,0.25,25000,1800,15500,5500,6,98

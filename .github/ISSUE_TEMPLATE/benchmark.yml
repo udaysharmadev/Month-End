@@ -1,0 +1,24 @@
+name: Paired benchmark submission
+description: Submit positive, neutral or negative results with success and spending evidence.
+body:
+  - type: textarea
+    id: conditions
+    attributes:
+      label: Frozen experimental conditions
+      description: Task IDs, repository revisions, model/version, effort, tools, cache strata, repeats and order seed.
+    validations:
+      required: true
+  - type: textarea
+    id: grading
+    attributes:
+      label: Independent task grading
+      description: Acceptance tests, failure handling, human intervention and exact-source checks.
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Sanitized paired data and analysis
+      description: Include all attempts and failures, actual billed cost provenance or a clear unavailable label, provider usage fields and limitations. Do not attach private raw exports.
+    validations:
+      required: true

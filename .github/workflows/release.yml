@@ -1,0 +1,29 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python scripts/release_check.py --tests
+      - run: python -m ruff check skills/month-end/scripts scripts tests
+      - run: python -m mypy
+      - run: python -m bandit -q -r skills/month-end/scripts scripts -ll
+      - name: Verify tag matches package version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python -c "import os,yaml,pathlib; text=pathlib.Path('skills/month-end/SKILL.md').read_text(); version=yaml.safe_load(text.split('---')[1])['metadata']['version']; assert os.environ['RELEASE_TAG']=='v'+version"
+      - run: python scripts/build_release.py --output dist
+      - name: Publish verified archives and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" dist/* --verify-tag --prerelease --title "Month End $RELEASE_TAG" --notes-file docs/release-notes.md

@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "data_kind": "local-mechanism",
+  "model": "local-reference-fixture-not-ai",
+  "repeats": 3,
+  "max_attempts": 1,
+  "cache_states": [
+    "cold",
+    "warm"
+  ],
+  "timeout_seconds": 15,
+  "arms": {
+    "baseline": {
+      "argv": [
+        "{python}",
+        "{suite}/candidate.py",
+        "{workspace}",
+        "{task_id}"
+      ],
+      "warmup_argv": [
+        "{python}",
+        "-c",
+        "print(\"Local warmup branch only; no provider cache is measured\")"
+      ]
+    },
+    "month-end": {
+      "argv": [
+        "{python}",
+        "{suite}/candidate.py",
+        "{workspace}",
+        "{task_id}"
+      ],
+      "warmup_argv": [
+        "{python}",
+        "-c",
+        "print(\"Local warmup branch only; no provider cache is measured\")"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "id": "decimal-total",
+      "category": "numeric-correctness",
+      "prompt": "Implement solve(prices) summing decimal price strings exactly and returning a two-decimal string rounded half away from zero after summation. Reject nonfinite values.",
+      "source_dir": "sources/decimal-total",
+      "source_sha256": "898a1d1d0f4ea6057e28e77740f3a5d9083607730b43b47fbafcba8080c8a17c",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "merge-intervals",
+      "category": "algorithm",
+      "prompt": "Implement solve(intervals) returning sorted merged inclusive intervals. Touching intervals merge; reject reversed bounds.",
+      "source_dir": "sources/merge-intervals",
+      "source_sha256": "bfd6365ed2e6eca4821fd891e42eebbeb085539a5c5a13f284a2f7485065f4ce",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "nested-redaction",
+      "category": "security",
+      "prompt": "Implement solve(JSON-compatible object) returning a nonmutating recursive copy. Redact exact case-insensitive password/token/secret dictionary keys to [REDACTED]; preserve other keys and scalar values.",
+      "source_dir": "sources/nested-redaction",
+      "source_sha256": "d9c2dc5a67fe5452df8c3a374dde3ac2a6f2a0f6eddab54788126a5a20cc0f3f",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "quoted-csv",
+      "category": "structured-data",
+      "prompt": "Implement solve(text) returning CSV rows with the standard CSV quoting rules, including embedded commas/newlines, empty fields and Unicode.",
+      "source_dir": "sources/quoted-csv",
+      "source_sha256": "36a2d19d63aa68069c426aacc60c3a17bb1dd8143a49a83a65cec2cd63c2bd5c",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "retry-budget",
+      "category": "failure-handling",
+      "prompt": "Implement solve(operation, attempts). Call at most the positive attempt budget, retry only ValueError, return successes including None, propagate final and nonretryable errors.",
+      "source_dir": "sources/retry-budget",
+      "source_sha256": "6968a6a0cac0eafecd6f6c71c329cff0c13871ed60629e75b450a56064053afa",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "rolling-window",
+      "category": "streaming",
+      "prompt": "Implement solve(iterable, width) returning consecutive full tuple windows from one pass over the iterable. Width must be positive; short inputs return no windows.",
+      "source_dir": "sources/rolling-window",
+      "source_sha256": "5a4cd9be5ac9fc1f8802c2a4a9d4f4b77b7b9bdf85e8e4470a03e9c2069ec431",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "safe-relative",
+      "category": "security",
+      "prompt": "Implement solve(path_string) normalizing a POSIX relative path. Reject absolute paths and any parent traversal component; return . for empty/current directory.",
+      "source_dir": "sources/safe-relative",
+      "source_sha256": "d8e629cf8ff0db45b849441ed18993900e9e5556ebfa08827985eb43106a7309",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "stable-unique",
+      "category": "data-model",
+      "prompt": "Implement solve(iterable) returning first-occurrence unique values in order. Inputs may include equal unhashable lists/dicts; preserve equality semantics.",
+      "source_dir": "sources/stable-unique",
+      "source_sha256": "a9b8a4aae2ec59eafb1cc648ba6e4c4465d88387f7f517c69ebbe0c691357e7d",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "strict-json-lines",
+      "category": "parsing-diagnostics",
+      "prompt": "Implement solve(text) parsing nonblank JSON lines into values. Reject malformed JSON and nonfinite constants with ValueError; include the 1-based line number in the error.",
+      "source_dir": "sources/strict-json-lines",
+      "source_sha256": "c8b36ecbc48e9f55a71201aca52f0f0a9d7680a2878efea8730a0e780763a37e",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "topological-order",
+      "category": "dependency-graph",
+      "prompt": "Implement solve(nodes, directed_edges) returning a deterministic lexicographically smallest topological order. Deduplicate edges and reject cycles or unknown endpoints.",
+      "source_dir": "sources/topological-order",
+      "source_sha256": "f2986759b1532eb5c1b517f3fb4876424fbd5e1e643d3ff1071bc6ef21dabd56",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "unicode-word-count",
+      "category": "internationalization",
+      "prompt": "Implement solve(text) returning Unicode-letter word counts using casefold. Split at digits, underscores and punctuation; preserve non-ASCII letters.",
+      "source_dir": "sources/unicode-word-count",
+      "source_sha256": "4c3cf28931cfa784d34a149042b70395bd3573faffac1f9b4851397cc12f5be8",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    },
+    {
+      "id": "utc-sort",
+      "category": "time-zones",
+      "prompt": "Implement solve(ISO timestamp strings) stably sorting by actual UTC instant, preserving original strings. Treat naive timestamps as UTC, support Z and offsets, reject invalid input.",
+      "source_dir": "sources/utc-sort",
+      "source_sha256": "59fb928e4ad16c7e806b447d911d7034433453eea3233167bcc41b4f0299b473",
+      "grader": [
+        "{python}",
+        "{suite}/grade.py",
+        "{workspace}",
+        "{task_id}"
+      ]
+    }
+  ],
+  "grading_files": {
+    "grade.py": "867b122b5d2c0384e08fe61497ca8601c73f894d35be7e915da51f980f625359"
+  },
+  "conditions": {
+    "effort": "not-applicable",
+    "harness": "local-reference-v1",
+    "toolset": "python-stdlib",
+    "grading": "local-behavior-v1"
+  }
+}

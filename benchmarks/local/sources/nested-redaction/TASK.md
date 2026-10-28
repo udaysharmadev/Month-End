@@ -1,0 +1,1 @@
+Implement solve(JSON-compatible object) returning a nonmutating recursive copy. Redact exact case-insensitive password/token/secret dictionary keys to [REDACTED]; preserve other keys and scalar values.
