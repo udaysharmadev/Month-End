@@ -1,0 +1,12 @@
+{
+  "host": "codex",
+  "status": "pass",
+  "check": "local-skill-discovery",
+  "model_calls": 0,
+  "skill": {
+    "name": "month-end",
+    "enabled": true,
+    "scope": "repo",
+    "path": ".agents/skills/month-end/SKILL.md"
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "data_kind": "local-mechanism",
+  "trials": 144,
+  "successes": 144,
+  "measurement_failures": 0,
+  "note": "Local fixture runs are mechanism checks, not AI quality, cache-hit or savings evidence.",
+  "category_cache_arm": {
+    "numeric-correctness/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "numeric-correctness/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "data-model/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "data-model/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "failure-handling/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "failure-handling/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "security/warm/month-end": {
+      "trials": 6,
+      "successes": 6,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "security/warm/baseline": {
+      "trials": 6,
+      "successes": 6,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "algorithm/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "algorithm/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "data-model/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "data-model/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "security/cold/month-end": {
+      "trials": 6,
+      "successes": 6,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "security/cold/baseline": {
+      "trials": 6,
+      "successes": 6,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "internationalization/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "internationalization/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "structured-data/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "structured-data/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "dependency-graph/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "dependency-graph/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "dependency-graph/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "dependency-graph/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "time-zones/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "time-zones/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "numeric-correctness/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "numeric-correctness/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "algorithm/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "algorithm/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "failure-handling/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "failure-handling/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "time-zones/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "time-zones/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "parsing-diagnostics/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "parsing-diagnostics/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "streaming/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "streaming/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "streaming/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "streaming/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "parsing-diagnostics/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "parsing-diagnostics/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "structured-data/cold/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "structured-data/cold/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "internationalization/warm/baseline": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    },
+    "internationalization/warm/month-end": {
+      "trials": 3,
+      "successes": 3,
+      "candidate_failures": 0,
+      "grader_failures": 0
+    }
+  },
+  "quality_regressions": [],
+  "quality_improvements": []
+}

@@ -10,7 +10,7 @@ dist/
 .mypy_cache/
 .cache/
 verification/private/
-verification/
+/verification/
 WORK_LOG.md
 IMPLEMENTATION_PLAN.md
 docs/Month_End_Research_and_PRD.docx

@@ -1,0 +1,130 @@
+{
+  "format_version": 1,
+  "kind": "live-subscription-quality-pilot",
+  "host": "codex",
+  "auth": "chatgpt-subscription",
+  "seed": 2026,
+  "planned_invocations": 6,
+  "executed_invocations": 6,
+  "repeats": 1,
+  "records": [
+    {
+      "task_id": "retry-budget",
+      "repeat": 1,
+      "arm": "month-end",
+      "candidate_exit": 0,
+      "grader_exit": 0,
+      "success": true,
+      "timed_out": false,
+      "skill_path_observed_in_trace": true,
+      "grade": "{\"task_id\": \"retry-budget\", \"passed_cases\": 10, \"kind\": \"independent-local-grader\"}",
+      "usage": {
+        "input_tokens": 85954,
+        "cached_input_tokens": 74752,
+        "output_tokens": 1245
+      },
+      "completed_turns": 1,
+      "errors": []
+    },
+    {
+      "task_id": "retry-budget",
+      "repeat": 1,
+      "arm": "baseline",
+      "candidate_exit": 0,
+      "grader_exit": 0,
+      "success": true,
+      "timed_out": false,
+      "skill_path_observed_in_trace": false,
+      "grade": "{\"task_id\": \"retry-budget\", \"passed_cases\": 10, \"kind\": \"independent-local-grader\"}",
+      "usage": {
+        "input_tokens": 59670,
+        "cached_input_tokens": 55808,
+        "output_tokens": 700
+      },
+      "completed_turns": 1,
+      "errors": []
+    },
+    {
+      "task_id": "quoted-csv",
+      "repeat": 1,
+      "arm": "month-end",
+      "candidate_exit": 0,
+      "grader_exit": 0,
+      "success": true,
+      "timed_out": false,
+      "skill_path_observed_in_trace": false,
+      "grade": "{\"task_id\": \"quoted-csv\", \"passed_cases\": 7, \"kind\": \"independent-local-grader\"}",
+      "usage": {
+        "input_tokens": 86289,
+        "cached_input_tokens": 80000,
+        "output_tokens": 1036
+      },
+      "completed_turns": 1,
+      "errors": []
+    },
+    {
+      "task_id": "quoted-csv",
+      "repeat": 1,
+      "arm": "baseline",
+      "candidate_exit": 0,
+      "grader_exit": 0,
+      "success": true,
+      "timed_out": false,
+      "skill_path_observed_in_trace": false,
+      "grade": "{\"task_id\": \"quoted-csv\", \"passed_cases\": 7, \"kind\": \"independent-local-grader\"}",
+      "usage": {
+        "input_tokens": 59534,
+        "cached_input_tokens": 55680,
+        "output_tokens": 478
+      },
+      "completed_turns": 1,
+      "errors": []
+    },
+    {
+      "task_id": "nested-redaction",
+      "repeat": 1,
+      "arm": "baseline",
+      "candidate_exit": 0,
+      "grader_exit": 0,
+      "success": true,
+      "timed_out": false,
+      "skill_path_observed_in_trace": false,
+      "grade": "{\"task_id\": \"nested-redaction\", \"passed_cases\": 6, \"kind\": \"independent-local-grader\"}",
+      "usage": {
+        "input_tokens": 75715,
+        "cached_input_tokens": 71552,
+        "output_tokens": 1144
+      },
+      "completed_turns": 1,
+      "errors": []
+    },
+    {
+      "task_id": "nested-redaction",
+      "repeat": 1,
+      "arm": "month-end",
+      "candidate_exit": 0,
+      "grader_exit": 0,
+      "success": true,
+      "timed_out": false,
+      "skill_path_observed_in_trace": true,
+      "grade": "{\"task_id\": \"nested-redaction\", \"passed_cases\": 6, \"kind\": \"independent-local-grader\"}",
+      "usage": {
+        "input_tokens": 105247,
+        "cached_input_tokens": 97792,
+        "output_tokens": 1304
+      },
+      "completed_turns": 1,
+      "errors": []
+    }
+  ],
+  "billed_cost_usd": null,
+  "cache_condition": "uncontrolled",
+  "limitations": [
+    "Not a registered sixty-task evaluation",
+    "Native CLI input/output/cache usage is not billing",
+    "Underlying model request count is not exposed by this pilot",
+    "Cold/warm provider caches are not controlled",
+    "No savings conclusion is justified",
+    "Exploratory development pilot; tool implementation was being finalized during execution"
+  ]
+}
