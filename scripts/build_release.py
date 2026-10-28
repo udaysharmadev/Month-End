@@ -28,7 +28,7 @@ MAX_FILE_BYTES = 20_000_000
 MAX_TOTAL_BYTES = 100_000_000
 MANIFEST = 'RELEASE_MANIFEST.json'
 PRIVATE_KEY = re.compile(rb'-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----')
-SERVICE_TOKEN = re.compile(rb'\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|sk-(?:proj-|ant-)?[A-Za-z0-9_-]{32,})\b')
+SERVICE_TOKEN = re.compile(rb'\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|sk-(?:proj-|ant-)?[A-Za-z0-9_-]{32,}|AIza[A-Za-z0-9_-]{35}|AQ\.[A-Za-z0-9_-]{40,})\b')
 
 
 def excluded(path: Path) -> bool:

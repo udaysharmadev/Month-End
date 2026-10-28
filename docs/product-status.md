@@ -50,3 +50,9 @@ fixtures. A fresh clone of the actual public repository installed and invoked
 the skill successfully; the published skills installer discovered one skill
 named `month-end`. Original attachments and private pilot traces are excluded
 from the repository and release archives.
+
+Additional live evidence: the [Gemini multi-model pilot](gemini-evaluation.md)
+tested six endpoint targets with delayed bounded retries. Three produced coding
+responses; other targets were blocked by access, quota or service availability.
+The pilot found substantial overhead when full instructions were forced into
+tiny one-shot tasks. This does not demonstrate token or billed savings.

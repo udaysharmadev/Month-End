@@ -1,0 +1,458 @@
+{
+  "api_responses_with_usage": 47,
+  "attempted_trials": 49,
+  "billed_cost_usd": null,
+  "by_model": {
+    "gemini-2.5-flash": {
+      "baseline": {
+        "accepted_successes": 0,
+        "api_responses": 0,
+        "first_pass_successes": 0,
+        "generated_trials": 0,
+        "grader_failures": 0,
+        "http_failures": 1,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reasoning_tokens": null,
+          "total_tokens": null
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingBudget": 1024
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 1,
+        "unknown_failure_usage": true
+      },
+      "month-end": {
+        "accepted_successes": 0,
+        "api_responses": 0,
+        "first_pass_successes": 0,
+        "generated_trials": 0,
+        "grader_failures": 0,
+        "http_failures": 1,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reasoning_tokens": null,
+          "total_tokens": null
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingBudget": 1024
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 1,
+        "unknown_failure_usage": true
+      }
+    },
+    "gemini-3.1-flash-lite": {
+      "baseline": {
+        "accepted_successes": 1,
+        "api_responses": 2,
+        "first_pass_successes": 1,
+        "generated_trials": 2,
+        "grader_failures": 1,
+        "http_failures": 6,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": 193,
+          "output_tokens": 537,
+          "reasoning_tokens": 256,
+          "total_tokens": 986
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [
+          "gemini-3.1-flash-lite"
+        ],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 3,
+        "unknown_failure_usage": true
+      },
+      "month-end": {
+        "accepted_successes": 1,
+        "api_responses": 1,
+        "first_pass_successes": 1,
+        "generated_trials": 1,
+        "grader_failures": 0,
+        "http_failures": 7,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": 1615,
+          "output_tokens": 127,
+          "reasoning_tokens": 111,
+          "total_tokens": 1853
+        },
+        "no_response_trials": 2,
+        "provider_returned_versions": [
+          "gemini-3.1-flash-lite"
+        ],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 3,
+        "unknown_failure_usage": true
+      }
+    },
+    "gemini-3.1-pro-preview": {
+      "baseline": {
+        "accepted_successes": 0,
+        "api_responses": 0,
+        "first_pass_successes": 0,
+        "generated_trials": 0,
+        "grader_failures": 0,
+        "http_failures": 3,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reasoning_tokens": null,
+          "total_tokens": null
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 1,
+        "unknown_failure_usage": true
+      },
+      "month-end": {
+        "accepted_successes": 0,
+        "api_responses": 0,
+        "first_pass_successes": 0,
+        "generated_trials": 0,
+        "grader_failures": 0,
+        "http_failures": 3,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reasoning_tokens": null,
+          "total_tokens": null
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 1,
+        "unknown_failure_usage": true
+      }
+    },
+    "gemini-3.5-flash-lite": {
+      "baseline": {
+        "accepted_successes": 10,
+        "api_responses": 14,
+        "first_pass_successes": 10,
+        "generated_trials": 12,
+        "grader_failures": 4,
+        "http_failures": 0,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": 1594,
+          "output_tokens": 2270,
+          "reasoning_tokens": null,
+          "total_tokens": 3864
+        },
+        "no_response_trials": 0,
+        "provider_returned_versions": [
+          "gemini-3.5-flash-lite"
+        ],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 12,
+        "unknown_failure_usage": false
+      },
+      "month-end": {
+        "accepted_successes": 10,
+        "api_responses": 17,
+        "first_pass_successes": 7,
+        "generated_trials": 12,
+        "grader_failures": 5,
+        "http_failures": 1,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": 28305,
+          "output_tokens": 2910,
+          "reasoning_tokens": null,
+          "total_tokens": 31215
+        },
+        "no_response_trials": 0,
+        "provider_returned_versions": [
+          "gemini-3.5-flash-lite"
+        ],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 2,
+        "tasks": 12,
+        "unknown_failure_usage": true
+      }
+    },
+    "gemini-3.6-flash": {
+      "baseline": {
+        "accepted_successes": 5,
+        "api_responses": 8,
+        "first_pass_successes": 4,
+        "generated_trials": 6,
+        "grader_failures": 1,
+        "http_failures": 2,
+        "incomplete_responses": 1,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": 919,
+          "output_tokens": 947,
+          "reasoning_tokens": 11673,
+          "total_tokens": 13539
+        },
+        "no_response_trials": 0,
+        "provider_returned_versions": [
+          "gemini-3.6-flash"
+        ],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 1,
+        "tasks": 6,
+        "unknown_failure_usage": true
+      },
+      "month-end": {
+        "accepted_successes": 4,
+        "api_responses": 5,
+        "first_pass_successes": 3,
+        "generated_trials": 4,
+        "grader_failures": 0,
+        "http_failures": 10,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": 8099,
+          "output_tokens": 899,
+          "reasoning_tokens": null,
+          "total_tokens": 17484
+        },
+        "no_response_trials": 3,
+        "provider_returned_versions": [
+          "gemini-3.6-flash"
+        ],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 1,
+        "tasks": 7,
+        "unknown_failure_usage": true
+      }
+    },
+    "gemini-3.8-flash": {
+      "baseline": {
+        "accepted_successes": 0,
+        "api_responses": 0,
+        "first_pass_successes": 0,
+        "generated_trials": 0,
+        "grader_failures": 0,
+        "http_failures": 3,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reasoning_tokens": null,
+          "total_tokens": null
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 1,
+        "unknown_failure_usage": true
+      },
+      "month-end": {
+        "accepted_successes": 0,
+        "api_responses": 0,
+        "first_pass_successes": 0,
+        "generated_trials": 0,
+        "grader_failures": 0,
+        "http_failures": 3,
+        "incomplete_responses": 0,
+        "metrics": {
+          "cache_read_tokens": null,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reasoning_tokens": null,
+          "total_tokens": null
+        },
+        "no_response_trials": 1,
+        "provider_returned_versions": [],
+        "requested_generation_config": {
+          "maxOutputTokens": 4096,
+          "thinkingConfig": {
+            "thinkingLevel": "LOW"
+          }
+        },
+        "source_guard_rejections": 0,
+        "tasks": 1,
+        "unknown_failure_usage": true
+      }
+    }
+  },
+  "checked_on": "2026-10-28",
+  "format_version": 1,
+  "generated_trials": 37,
+  "http_failure_attempts": 40,
+  "kind": "gemini-constrained-patch-generation",
+  "limitations": [
+    "Only one repeat per task; no full host tool loop",
+    "Blocked/no-response trials are access/service failures, not model accuracy results",
+    "Five model schedules stopped early after bounded service/access retries; only Gemini 3.5 Flash-Lite completed all twelve task pairs",
+    "Full skill instructions were forcibly loaded on tiny tasks despite the skill metadata advising against that",
+    "Provider cache conditions uncontrolled; missing cache counts remain unknown",
+    "Received-response usage includes failed patches and retries; transport failure usage can be unknown",
+    "Rolling-window grade requires a concrete list and immediate invalid-width exception; generator-return differences are contract-sensitive",
+    "No invoice or cost-per-success savings claim"
+  ],
+  "offline_guard_review": {
+    "arm": "month-end",
+    "model": "gemini-3.5-flash-lite",
+    "new_api_calls": 0,
+    "original_responses_and_retry_usage_preserved": true,
+    "original_trial_success": false,
+    "passed_cases": 9,
+    "reason": "Original guard rejected valid PurePosixPath import. Same saved response passes after guard correction.",
+    "response_generation": 1,
+    "reviewed_trial_success": true,
+    "task_id": "safe-relative"
+  },
+  "original_accepted_trials": 31,
+  "reviewed_accepted_trials": 32,
+  "runs": [
+    {
+      "attempted_trials": 30,
+      "id": "gemini-multimodel-01",
+      "protocol": {
+        "billing_usd": null,
+        "cache_state": "uncontrolled",
+        "grader_sha256": "867b122b5d2c0384e08fe61497ca8601c73f894d35be7e915da51f980f625359",
+        "kind": "gemini-constrained-patch-generation",
+        "limits": "No API tools/agent loop; measures patch quality and instruction overhead, not tool-output savings",
+        "max_candidate_generations_per_trial": 2,
+        "max_http_attempts_per_generation": 3,
+        "models": [
+          "gemini-3.8-flash",
+          "gemini-3.5-flash-lite",
+          "gemini-3.1-pro-preview",
+          "gemini-2.5-flash"
+        ],
+        "repeats": 1,
+        "seed": 2026,
+        "skill_sha256": "2609a2859ba218e48301114605db72fdf51a87dd6f9f0cee07ccab84220f56bf",
+        "tasks": [
+          "decimal-total",
+          "merge-intervals",
+          "nested-redaction",
+          "quoted-csv",
+          "retry-budget",
+          "rolling-window",
+          "safe-relative",
+          "stable-unique",
+          "strict-json-lines",
+          "topological-order",
+          "unicode-word-count",
+          "utc-sort"
+        ]
+      }
+    },
+    {
+      "attempted_trials": 19,
+      "id": "gemini-multimodel-02",
+      "protocol": {
+        "billing_usd": null,
+        "cache_state": "uncontrolled",
+        "grader_sha256": "867b122b5d2c0384e08fe61497ca8601c73f894d35be7e915da51f980f625359",
+        "harness_sha256": "2d2b5849afba2a251eb1ea6772a39d1d0938b0f612f60758d9c88d62d9379bfb",
+        "kind": "gemini-constrained-patch-generation",
+        "limits": "No API tools/agent loop; measures patch quality and instruction overhead, not tool-output savings",
+        "max_candidate_generations_per_trial": 2,
+        "max_http_attempts_per_generation": 3,
+        "models": [
+          "gemini-3.1-flash-lite",
+          "gemini-3.6-flash"
+        ],
+        "repeats": 1,
+        "seed": 2026,
+        "skill_sha256": "2609a2859ba218e48301114605db72fdf51a87dd6f9f0cee07ccab84220f56bf",
+        "suite_sha256": "2a000da65b0219e6b69b38c893dc4a1924b9f53a7d450689227ca2942aec6a8c",
+        "tasks": [
+          "decimal-total",
+          "merge-intervals",
+          "nested-redaction",
+          "quoted-csv",
+          "retry-budget",
+          "rolling-window",
+          "safe-relative",
+          "stable-unique",
+          "strict-json-lines",
+          "topological-order",
+          "unicode-word-count",
+          "utc-sort"
+        ]
+      }
+    }
+  ]
+}

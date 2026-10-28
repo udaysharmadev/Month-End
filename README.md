@@ -216,7 +216,12 @@ month-end/
 
 [Recorded checks and scope](docs/product-status.md) ·
 [Live subscription pilot](docs/verification/live-codex-summary.json) ·
-[Local suite summary](docs/verification/local-suite-summary.json).
+[Local suite summary](docs/verification/local-suite-summary.json) ·
+[Gemini multi-model results](docs/gemini-evaluation.md).
+
+The Gemini API pilot found increased token use when the entire skill was forced
+into tiny one-shot tasks. Use its activation boundaries; this release does not
+claim demonstrated model-token or billed savings.
 
 Run local verification with Python 3.9+:
 
