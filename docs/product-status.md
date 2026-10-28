@@ -43,3 +43,10 @@ that alone is not a completed coding evaluation.
 No percentage-saving claim, sixty-task live study, external security audit or
 fabricated screen recording is included. The release contains a reproducible
 terminal-byte demo and an honest recording storyboard instead.
+
+Hosted verification: [all five CI jobs passed](https://github.com/udaysharmadev/Month-End/actions/runs/40735467870),
+covering Linux Python 3.9/3.12/3.14, macOS Python 3.12 and optional exact-tokenizer
+fixtures. A fresh clone of the actual public repository installed and invoked
+the skill successfully; the published skills installer discovered one skill
+named `month-end`. Original attachments and private pilot traces are excluded
+from the repository and release archives.

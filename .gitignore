@@ -11,6 +11,7 @@ dist/
 .cache/
 verification/private/
 /verification/
+/benchmarks/results/
 WORK_LOG.md
 IMPLEMENTATION_PLAN.md
 docs/Month_End_Research_and_PRD.docx

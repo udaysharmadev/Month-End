@@ -237,7 +237,10 @@ On Windows, use `.venv\Scripts\python.exe` for the virtual-environment commands.
 PyYAML is a developer-only dependency for manifest checks; the installed helpers
 remain standard-library-only. YAML-dependent tests explicitly skip if it is
 absent. CI is configured for Python 3.9, 3.12 and 3.14 on Linux, plus Python 3.12
-on macOS; a local run does not establish that hosted CI has passed.
+on macOS, plus a real-vocabulary tokenizer job. All five jobs passed in
+[hosted CI](https://github.com/udaysharmadev/Month-End/actions/runs/40735467870).
+Installation from the public Git clone and `skills add --list` discovery were
+also exercised successfully.
 
 ## Research and limitations
 
