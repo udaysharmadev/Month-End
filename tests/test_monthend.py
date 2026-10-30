@@ -214,10 +214,13 @@ class MonthEndTests(unittest.TestCase):
 
     @unittest.skipUnless(os.name == 'posix', 'POSIX signal semantics')
     def test_run_preserves_signal_exit(self):
-        p = self.call_cli('run', '--', sys.executable, '-c',
-                          'import os, signal; os.kill(os.getpid(), signal.SIGTERM)')
-        self.assertEqual(p.returncode, -15)
-        self.assertIn('exit=-15', p.stdout)
+        for name, number in [('SIGTERM', 15), ('SIGKILL', 9)]:
+            with self.subTest(signal=name):
+                p = self.call_cli('run', '--', sys.executable, '-c',
+                                  'import os, signal; os.kill(os.getpid(), signal.' + name + ')')
+                self.assertEqual(p.returncode, -number, p.stderr)
+                self.assertIn(f'exit={-number}', p.stdout)
+                self.assertNotIn('Traceback', p.stderr)
 
     def test_binary_and_oversized_raw_log_is_complete(self):
         with tempfile.TemporaryDirectory() as td:

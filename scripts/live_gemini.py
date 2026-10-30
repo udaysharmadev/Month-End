@@ -8,10 +8,8 @@ import concurrent.futures
 import getpass
 import hashlib
 import json
-import os
 import random
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -23,6 +21,8 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from candidate_sandbox import bounded_subprocess, require_sandbox
+
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/'
 DEFAULT_MODELS = ('gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-pro-preview', 'gemini-2.5-flash')
@@ -31,7 +31,9 @@ ALLOWED_IMPORTS = {'csv', 'io', 'decimal', 'collections', 'datetime', 'heapq', '
                    're', 'unicodedata', 'posixpath', 'pathlib', 'copy', 'math', 'functools', 'itertools', 'typing'}
 FORBIDDEN_NAMES = {'eval', 'exec', 'compile', 'open', '__import__', 'getattr', 'setattr',
                    'delattr', 'globals', 'locals', 'vars', 'input', 'breakpoint', 'help',
-                   'read_text', 'read_bytes', 'write_text', 'write_bytes', 'FileIO', 'file_digest'}
+                   'read_text', 'read_bytes', 'write_text', 'write_bytes', 'FileIO', 'file_digest',
+                   'os', 'sys', 'subprocess', 'open_code', 'Path', 'PosixPath', 'WindowsPath',
+                   'get_type_hints', 'get_annotations', 'ForwardRef'}
 METRICS = ('input_tokens', 'output_tokens', 'reasoning_tokens', 'cache_read_tokens', 'total_tokens')
 PRINT_LOCK = threading.Lock()
 
@@ -159,6 +161,13 @@ def extract_code(response):
     if not any(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == 'solve' for node in tree.body):
         raise ValueError('candidate has no solve function')
     for node in ast.walk(tree):
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            imported = [alias.name for alias in node.names]
+            if isinstance(node, ast.ImportFrom):
+                imported.append(node.module or '')
+            if any(part == '*' or part.startswith('_') or part in FORBIDDEN_NAMES
+                   for name in imported for part in name.split('.')):
+                raise ValueError('candidate imports a forbidden execution or private implementation name')
         if isinstance(node, ast.Import):
             if any(alias.name.split('.')[0] not in ALLOWED_IMPORTS for alias in node.names):
                 raise ValueError('candidate imports outside the grading allowlist')
@@ -167,7 +176,7 @@ def extract_code(response):
                 raise ValueError('candidate imports outside the grading allowlist')
         elif isinstance(node, ast.Name) and (node.id in FORBIDDEN_NAMES or node.id.startswith('__')):
             raise ValueError('candidate uses a forbidden execution/introspection name')
-        elif isinstance(node, ast.Attribute) and (node.attr in FORBIDDEN_NAMES or node.attr.startswith('__') or node.attr in {'os', 'sys', 'subprocess'}):
+        elif isinstance(node, ast.Attribute) and (node.attr in FORBIDDEN_NAMES or node.attr.startswith('_')):
             raise ValueError('candidate uses a forbidden execution/introspection attribute')
     return code + '\n'
 
@@ -177,17 +186,7 @@ def grade_code(code, task_id, grader):
         workspace = Path(temporary).resolve()
         (workspace / 'app.py').write_text(code, encoding='utf-8')
         argv = [sys.executable, '-I', str(grader), str(workspace), task_id]
-        environment = {'PATH': os.defpath, 'HOME': str(workspace), 'TMPDIR': str(workspace), 'PYTHONHASHSEED': '0'}
-        if sys.platform == 'darwin' and shutil.which('sandbox-exec'):
-            profile = ('(version 1)(allow default)(deny network*)'
-                       '(deny file-write* (require-not (subpath ' + json.dumps(str(workspace)) + ')))')
-            argv = ['sandbox-exec', '-p', profile, *argv]
-        try:
-            result = subprocess.run(argv, cwd=workspace, env=environment, capture_output=True,
-                                    text=True, timeout=15)
-            return {'exit': result.returncode, 'stdout': result.stdout[-8000:], 'stderr': result.stderr[-8000:]}
-        except subprocess.TimeoutExpired:
-            return {'exit': 124, 'stdout': '', 'stderr': 'independent grade timed out'}
+        return bounded_subprocess(argv, workspace, read_paths=(Path(grader),), require_isolation=True)
 
 
 def generation_config(model):
@@ -327,6 +326,10 @@ def main(argv=None):
         return 0
     if not args.output:
         parser.error('--execute requires an explicit new --output directory')
+    try:
+        require_sandbox()
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        parser.error(str(error))
     key = getpass.getpass('Gemini key (hidden): ')
     client = Client(key)
     del key
@@ -348,6 +351,7 @@ def main(argv=None):
                     'skill_sha256': hashlib.sha256(skill_text.encode()).hexdigest(),
                     'grader_sha256': hashlib.sha256((ROOT / 'benchmarks/local/grade.py').read_bytes()).hexdigest(),
                     'harness_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                    'sandbox_sha256': hashlib.sha256((ROOT / 'scripts/candidate_sandbox.py').read_bytes()).hexdigest(),
                     'suite_sha256': hashlib.sha256((ROOT / 'benchmarks/local/suite.json').read_bytes()).hexdigest(),
                     'cache_state': 'uncontrolled', 'billing_usd': None,
                     'limits': 'No API tools/agent loop; measures patch quality and instruction overhead, not tool-output savings'}

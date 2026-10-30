@@ -17,3 +17,8 @@ cache-setup branches: 144 independently graded local trials. The branches do
 not control a provider cache, and reference fixture results are not AI savings.
 Live subscription pilots and any availability limits are recorded separately.
 No billed-cost savings claim is made; subscription task billing is unavailable.
+
+This release fixes installed-copy management and SIGKILL propagation, rejects
+archive path aliases, and hardens developer-only candidate execution with shared
+bounded macOS isolation. The sixty-task workflow harness is implemented and
+tested offline; its live protocol has not been executed in this release.

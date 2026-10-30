@@ -6,10 +6,13 @@ Month End is an Agent Skill for Claude Code, Codex and Antigravity. Locate code
 before reading it, keep exact edit anchors, shorten noisy output, and recover
 complete diagnostics without rerunning commands.
 
-> **1.0.0-rc.1:** complete local toolset, provider usage imports, paired benchmark
-> runner and reproducible release archives. **133 tests pass; 144 local fixture
-> trials and six live Codex coding runs pass.** Model savings remain unproven;
-> terminal-byte reduction is not billed-cost reduction.
+> **1.0.0:** portable local tools, provider usage imports, paired evaluation and
+> reproducible archives. Includes live model findings and a replayable terminal
+> demo. Model savings remain unproven; terminal bytes are not billed costs.
+
+Use it for large codebases, noisy test/build output and long task handoffs.
+Small one-step tasks can cost more context when a skill is loaded unnecessarily.
+The MIT-licensed helpers run locally; no Month End account or service is needed.
 
 ## Install locally
 
@@ -29,9 +32,24 @@ For a manual copy, place `skills/month-end/` at `.agents/skills/month-end/`
 (Codex/Antigravity) or `.claude/skills/month-end/` (Claude Code). Then ask:
 **Use Month End for this coding task and preserve correctness.**
 
+Verify or remove a managed Codex installation using the installed copy:
+
+```bash
+python3 /path/to/your/project/.agents/skills/month-end/scripts/integrations.py \
+  status --host codex --project /path/to/your/project
+python3 /path/to/your/project/.agents/skills/month-end/scripts/integrations.py \
+  uninstall --host codex --project /path/to/your/project
+```
+
+Removal refuses modified files and user additions. Keep the clone if you used a
+manual copy, which has no managed-install receipt. See
+[release readiness](docs/market-readiness.md) for current verification and gates.
+
 An actual local command demonstration produces 7,011 raw bytes and a 151-byte
 displayed command body, with failure exit 9 preserved.
 [Reproduce the demo](docs/demo-record.json). These are terminal bytes, not model tokens.
+[Replay the actual command capture](docs/terminal-demo.html) offline, or use its
+[asciicast recording](docs/terminal-demo.cast).
 
 ## Tools included
 
@@ -217,7 +235,8 @@ month-end/
 [Recorded checks and scope](docs/product-status.md) ·
 [Live subscription pilot](docs/verification/live-codex-summary.json) ·
 [Local suite summary](docs/verification/local-suite-summary.json) ·
-[Gemini multi-model results](docs/gemini-evaluation.md).
+[Gemini multi-model results](docs/gemini-evaluation.md) ·
+[Unexecuted tool-workflow evaluation protocol](docs/workflow-evaluation.md).
 
 The Gemini API pilot found increased token use when the entire skill was forced
 into tiny one-shot tasks. Use its activation boundaries; this release does not
@@ -251,9 +270,9 @@ also exercised successfully.
 
 Sources are grouped by evidence quality in [evidence.md](skills/month-end/references/evidence.md). Official docs establish what the platforms do; academic and preprint work supplies hypotheses and counterexamples; Reddit/X/Quora comments are not validation. Quora access was not available in this research run; unofficial leaked prompt dumps were deliberately excluded as unreliable and version-dependent.
 
-The supplied PRD remains local and is excluded from public source/releases. The evidence
-register records which sources were rechecked during implementation; its other
-entries still require release-time verification.
+The supplied PRD remains local and is excluded from public source/releases. The
+evidence register records reviewed source identities, dates and explicit
+limitations; primary references are rechecked at release time.
 
 ## Contributing
 

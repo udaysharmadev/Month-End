@@ -26,8 +26,8 @@ handling, import normalization, benchmark isolation or release packaging.
 
 ## Supported release policy
 
-During the release-candidate phase, fixes target the newest release candidate.
-The project does not yet promise a security response SLA or long-term support
+Fixes target the newest stable release. The project does not promise a security
+response SLA or long-term support
 for older prototypes. Security reports will be evaluated without claiming an
 external audit has already occurred.
 

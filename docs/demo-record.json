@@ -6,7 +6,7 @@
   "failing_exit": 9,
   "failing_stdout": "ERROR: invalid payment currency\n[month-end] exit=9 kind=tests raw_bytes=32 displayed_bytes=32 lines=1 excerpt=false profile=generic filter=bounded\n[month-end] Command FAILED. Diagnostics above are an excerpt, NOT a substitute for complete error analysis.\n[month-end] For full evidence rerun with --log PATH or execute command unwrapped.\n",
   "format_version": 1,
-  "helper_version": "month-end 1.0.0-rc.1",
+  "helper_version": "month-end 1.0.0",
   "input": "500 passing fixture lines and one real failing child command",
   "limitations": [
     "No model called",

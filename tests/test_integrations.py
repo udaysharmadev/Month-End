@@ -40,6 +40,23 @@ class IntegrationTests(unittest.TestCase):
             result = self.call('install', '--host', 'codex', '--project', td)
             self.assertEqual(result.returncode, 2)
 
+    def test_installed_copy_can_manage_its_own_project(self):
+        for host, prefix in [('claude', '.claude'), ('codex', '.agents'), ('antigravity', '.agents')]:
+            with self.subTest(host=host), tempfile.TemporaryDirectory() as td:
+                installed = self.call('install', '--host', host, '--project', td)
+                self.assertEqual(installed.returncode, 0, installed.stderr)
+                target = Path(td) / prefix / 'skills/month-end'
+                cli = target / 'scripts/integrations.py'
+                commands = [('install', []), ('status', [])]
+                if host != 'antigravity':
+                    commands.append(('hook-config', ['--checkpoint', 'task-note.md']))
+                commands.append(('uninstall', []))
+                for action, extra in commands:
+                    result = subprocess.run([sys.executable, str(cli), action, '--host', host,
+                                             '--project', td, *extra], capture_output=True, text=True, timeout=15)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertFalse(target.exists())
+
     def test_install_refuses_symlink_escape(self):
         with tempfile.TemporaryDirectory() as td, tempfile.TemporaryDirectory() as outside:
             (Path(td) / '.agents').symlink_to(outside, target_is_directory=True)

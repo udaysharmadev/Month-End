@@ -14,6 +14,12 @@ idempotent. A different or modified copy is preserved, and uninstall refuses to
 remove user additions or modified files. Source-tree symlinks and paths escaping
 the project are rejected. Global configuration is never touched.
 
+The installed helper can manage its own project with the same commands; use
+its full path when your current directory is elsewhere. Managed CLI execution
+does not add bytecode caches inside the skill. If you import the helpers from
+your own Python code, use `python3 -B` to avoid unmanaged cache files. Removal
+preserves all unknown files, including files placed inside cache directories.
+
 ## Optional checkpoint hook
 
 Codex and Claude document a `SessionStart` command hook with

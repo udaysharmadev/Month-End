@@ -1,6 +1,6 @@
 # Product scope and evidence
 
-Version 1.0.0-rc.1 implements the portable Month End skill and its optional local
+Version 1.0.0 implements the portable Month End skill and its optional local
 tools. Package functionality and empirical model savings are tracked separately.
 
 | Requirement | Implementation | Evidence |
@@ -31,6 +31,11 @@ sixty-task live study and independent reproduction.
 The included twelve-task suite uses deterministic reference patches to verify
 the runner; its 144 trials are not 144 independent AI tasks. The small native
 subscription pilot is exploratory and does not establish general effectiveness.
+The [additional sixty-task suite](../benchmarks/workflow/README.md) contains
+distinct synthetic function-repair contracts, not production repositories. Its
+[tool-workflow protocol](workflow-evaluation.md) has an implemented harness and
+offline checks, but no completed live study or registered result dataset. It is
+separate from fixture-runner checks and the earlier single-response pilot.
 No task-level invoice is available from subscription use, so billed-cost savings
 remain unavailable. Research papers were reviewed, not independently reproduced.
 
@@ -40,9 +45,14 @@ with API-key authentication, so its generation tests were excluded under the
 user's no-paid-API constraint. Antigravity's native model catalog was reachable;
 that alone is not a completed coding evaluation.
 
-No percentage-saving claim, sixty-task live study, external security audit or
-fabricated screen recording is included. The release contains a reproducible
-terminal-byte demo and an honest recording storyboard instead.
+No percentage-saving claim or external security audit is included. The release
+contains an [actual replayable terminal capture](terminal-demo.html), its
+asciicast data and command receipts. This is explicitly a local command capture,
+not a fabricated agent screen recording.
+
+Current 1.0.0 market-release verification and unresolved external gates are
+recorded in [market-readiness.md](market-readiness.md). Historical hosted runs
+below cover their linked revisions, not subsequent local changes.
 
 Hosted verification: [all five CI jobs passed](https://github.com/udaysharmadev/Month-End/actions/runs/40735467870),
 covering Linux Python 3.9/3.12/3.14, macOS Python 3.12 and optional exact-tokenizer

@@ -133,6 +133,16 @@ class ReleaseTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     release_check.check_release(root, as_of=date(2026, 10, 28))
 
+    def test_noncanonical_archive_paths_cannot_alias_extracted_files(self):
+        root = self.fixture()
+        archive = root.parent / 'aliased.zip'
+        for alias in ('./LICENSE', 'nested//file', 'nested/./file', 'LICENSE/'):
+            with self.subTest(alias=alias):
+                archive.write_bytes(build_release.archive_bytes(
+                    {'LICENSE': b'original', alias: b'changed'}, '1.0.0', 'skill'))
+                with self.assertRaisesRegex(ValueError, 'unsafe archive path'):
+                    build_release.verify_archive(archive)
+
     def test_stale_research_and_unknown_mechanism_sources_are_rejected(self):
         root = self.fixture()
         release_check.check_source_register(root, date(2026, 10, 28))

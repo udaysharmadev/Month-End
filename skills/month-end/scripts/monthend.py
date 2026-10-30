@@ -16,7 +16,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = '1.0.0-rc.1'
+VERSION = '1.0.0'
 IGNORES = {'.git', 'node_modules', '.next', 'dist', 'build', 'coverage', '__pycache__', '.venv', 'vendor', '.turbo', 'target'}
 CONFIG = {'AGENTS.md', 'CLAUDE.md', 'GEMINI.md', 'SKILL.md'}
 IMPORTANT = re.compile(r'(?i)(error|fail(?:ed|ure)?|exception|traceback|panic|warning|warn:|fatal|assertion|\b[1-9]\d* failed\b|security|vulnerab|not found|denied)')
@@ -558,6 +558,8 @@ if __name__ == '__main__':
     if result < 0 and os.name == 'posix':
         sys.stdout.flush()
         sys.stderr.flush()
-        signal.signal(-result, signal.SIG_DFL)
+        # SIGKILL cannot have a handler; it can still be propagated to this process.
+        if -result != signal.SIGKILL:
+            signal.signal(-result, signal.SIG_DFL)
         os.kill(os.getpid(), -result)
     raise SystemExit(result)

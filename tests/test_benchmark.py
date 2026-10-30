@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'skills' / 'month-end' / 'scripts'))
 import benchmark
 import compare_runs
+import integrations
 
 
 class BenchmarkTests(unittest.TestCase):
@@ -112,6 +114,27 @@ class BenchmarkTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'fingerprint mismatch'):
             benchmark.load_manifest(path)
         self.assertFalse((root / 'results').exists())
+
+    def test_installed_usage_benchmark_remains_reversibly_managed(self):
+        usage = {'object': 'response', 'model': 'local-fixture',
+                 'usage': {'input_tokens': 10, 'output_tokens': 3}}
+        code = ('from pathlib import Path; import json,uuid; data=' + repr(usage) + '; '
+                'data["id"]=str(uuid.uuid4()); Path("usage.json").write_text(json.dumps(data)); '
+                'Path("app.py").write_text("VALUE = 7\\n")')
+        root, path, data = self.fixture(code)
+        for arm in data['arms'].values():
+            arm.update(provider='openai', usage_file='usage.json')
+        path.write_text(json.dumps(data))
+        integrations.install(root, 'codex')
+        installed = root / '.agents/skills/month-end'
+        result = subprocess.run([sys.executable, str(installed / 'scripts/benchmark.py'), str(path),
+                                 '--execute', '--output', str(root / 'results')],
+                                capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads((root / 'results/summary.json').read_text())['measurement_failures'], 0)
+        self.assertFalse(list(installed.rglob('*.pyc')))
+        integrations.uninstall(root, 'codex')
+        self.assertFalse(installed.exists())
 
     def test_replayed_usage_is_not_counted_as_new_spending(self):
         usage = {'object':'response', 'id':'same-exported-call', 'model':'local-fixture',

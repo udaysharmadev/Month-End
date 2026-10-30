@@ -11,7 +11,7 @@ import stat
 import sys
 import tempfile
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from validate_package import check_links, validate_package, validate_skill
 
@@ -122,7 +122,8 @@ def verify_archive(path: Path) -> dict:
             mode = stat.S_IFMT(info.external_attr >> 16)
             if info.file_size > MAX_FILE_BYTES:
                 raise ValueError('archive member exceeds verification size limit')
-            if (not name.startswith('month-end/') or Path(name).is_absolute() or '..' in parts
+            if (not name.startswith('month-end/') or PurePosixPath(name).as_posix() != name
+                    or Path(name).is_absolute() or '..' in parts
                     or '\\' in name or any(ord(character) < 32 for character in name)
                     or mode not in {0, stat.S_IFREG}):
                 raise ValueError('unsafe archive path')

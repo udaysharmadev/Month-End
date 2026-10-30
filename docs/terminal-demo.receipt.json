@@ -1,0 +1,60 @@
+{
+  "format_version": 1,
+  "scope": "actual local subprocess-output recording",
+  "capture_method": "stdout then stderr after each completed child; no interactive TTY",
+  "agent_screen_recording": false,
+  "provider_usage": null,
+  "billed_cost_usd": null,
+  "reading_pause_seconds": 9.5,
+  "commands": [
+    {
+      "command": "python3 .month-end/monthend.py --version",
+      "exit": 0,
+      "stdout_bytes": 16,
+      "stderr_bytes": 0,
+      "stdout_sha256": "dc005a68b30622ed1c95adf4adc32d98668204e7a166f4498dbfbfc43e5560e0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "python3 .month-end/monthend.py locate validate_payment --root .",
+      "exit": 0,
+      "stdout_bytes": 14,
+      "stderr_bytes": 62,
+      "stdout_sha256": "cc84860229500fd6b211601c73f66436b130e593d1d3922320aa305c101ad82b",
+      "stderr_sha256": "a8150727e138417b4dee5d55ff32e4febe52452bfc8b520d67bce625b10cd5e6"
+    },
+    {
+      "command": "python3 .month-end/monthend.py excerpt payments.py --pattern validate_payment --context 1",
+      "exit": 0,
+      "stdout_bytes": 243,
+      "stderr_bytes": 0,
+      "stdout_sha256": "cae8bee68dfe2441a30592b902433029931dd32f3e57a5a040d1a8eadef544b3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "python3 passing.py",
+      "exit": 0,
+      "stdout_bytes": 7011,
+      "stderr_bytes": 0,
+      "stdout_sha256": "8fafd4bba144d3d2571eba738e049c588cd38e6ddfd49e8df6fdd5638b07e614",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "python3 .month-end/monthend.py run --kind tests -- python3 passing.py",
+      "exit": 0,
+      "stdout_bytes": 270,
+      "stderr_bytes": 0,
+      "stdout_sha256": "efef16955089001ac19fac6854c82c7ae77f7384a869a2daaa2db1ab5a16c2c9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "python3 .month-end/monthend.py run --kind tests -- python3 failing.py",
+      "exit": 9,
+      "stdout_bytes": 337,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e2eff49518a5d8e9653a49b948b45a2be8abbbed5f78339150eec12eb24721f7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "duration_seconds": 57.468795
+}

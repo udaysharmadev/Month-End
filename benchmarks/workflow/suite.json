@@ -1,0 +1,3420 @@
+{
+  "format_version": 1,
+  "kind": "synthetic-tool-workflow-suite",
+  "tasks": [
+    {
+      "id": "csv-fields",
+      "category": "parsing",
+      "prompt": "Implement solve(text). Parse exactly one CSV record using standard double-quote escaping, including commas/newlines inside quotes. Empty text returns []. Reject input containing multiple records with ValueError. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return text.split(',')\n",
+      "tests": [
+        {
+          "args": [
+            ""
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            "a,b"
+          ],
+          "expected": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "args": [
+            "\"a,b\",c"
+          ],
+          "expected": [
+            "a,b",
+            "c"
+          ]
+        },
+        {
+          "args": [
+            "\"a\nb\",\"\"\"x\"\"\""
+          ],
+          "expected": [
+            "a\nb",
+            "\"x\""
+          ]
+        },
+        {
+          "args": [
+            "a\nb"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "query-pairs",
+      "category": "parsing",
+      "prompt": "Implement solve(text). Parse an ampersand-separated query into ordered [key,value] pairs. Split each item on the first =; missing = means empty value; skip empty items. Keep percent sequences and plus signs unchanged. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return [part.split('=') for part in text.split('&')]\n",
+      "tests": [
+        {
+          "args": [
+            ""
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            "a=1&b=2"
+          ],
+          "expected": [
+            [
+              "a",
+              "1"
+            ],
+            [
+              "b",
+              "2"
+            ]
+          ]
+        },
+        {
+          "args": [
+            "a=x=y&flag"
+          ],
+          "expected": [
+            [
+              "a",
+              "x=y"
+            ],
+            [
+              "flag",
+              ""
+            ]
+          ]
+        },
+        {
+          "args": [
+            "&&x=&x=2&"
+          ],
+          "expected": [
+            [
+              "x",
+              ""
+            ],
+            [
+              "x",
+              "2"
+            ]
+          ]
+        },
+        {
+          "args": [
+            "q=a+b&x=%20"
+          ],
+          "expected": [
+            [
+              "q",
+              "a+b"
+            ],
+            [
+              "x",
+              "%20"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "header-fields",
+      "category": "parsing",
+      "prompt": "Implement solve(lines). Parse nonblank header lines into a dictionary with lowercase stripped names and stripped values. Split on first colon; later duplicate replaces earlier. Reject missing colon or an empty name. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(lines):\n    return dict(line.split(':') for line in lines)\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": {}
+        },
+        {
+          "args": [
+            [
+              "X-A: 1",
+              "x-a: 2"
+            ]
+          ],
+          "expected": {
+            "x-a": "2"
+          }
+        },
+        {
+          "args": [
+            [
+              " Link : https://a:b",
+              " "
+            ]
+          ],
+          "expected": {
+            "link": "https://a:b"
+          }
+        },
+        {
+          "args": [
+            [
+              "missing"
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              " : x"
+            ]
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "integer-ranges",
+      "category": "parsing",
+      "prompt": "Implement solve(text). Expand comma-separated integer tokens or ascending inclusive ranges N..M into a list, retaining duplicates and order. Whitespace is allowed around items/endpoints. Empty text returns []. Reject malformed or descending ranges. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return [int(x) for x in text.split(',')]\n",
+      "tests": [
+        {
+          "args": [
+            ""
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            "1,3..5,3"
+          ],
+          "expected": [
+            1,
+            3,
+            4,
+            5,
+            3
+          ]
+        },
+        {
+          "args": [
+            " -2 .. 0 "
+          ],
+          "expected": [
+            -2,
+            -1,
+            0
+          ]
+        },
+        {
+          "args": [
+            "3..1"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1..2..3"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "escaped-fields",
+      "category": "parsing",
+      "prompt": "Implement solve(text). Split on unescaped |. A backslash escapes exactly the following character (including | or backslash) and is removed. Retain empty fields. Reject a trailing unpaired backslash. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return text.split('|')\n",
+      "tests": [
+        {
+          "args": [
+            ""
+          ],
+          "expected": [
+            ""
+          ]
+        },
+        {
+          "args": [
+            "a|b||"
+          ],
+          "expected": [
+            "a",
+            "b",
+            "",
+            ""
+          ]
+        },
+        {
+          "args": [
+            "a\\|b|c"
+          ],
+          "expected": [
+            "a|b",
+            "c"
+          ]
+        },
+        {
+          "args": [
+            "a\\\\b"
+          ],
+          "expected": [
+            "a\\b"
+          ]
+        },
+        {
+          "args": [
+            "a\\"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "key-value-lines",
+      "category": "parsing",
+      "prompt": "Implement solve(text). Parse nonblank lines key=value, ignoring lines whose stripped form begins #. Split on first =; strip key/value; duplicate keys are errors; reject empty key or missing =. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return dict(line.split('=') for line in text.splitlines())\n",
+      "tests": [
+        {
+          "args": [
+            "# comment\n"
+          ],
+          "expected": {}
+        },
+        {
+          "args": [
+            " x = y=z \nempty= "
+          ],
+          "expected": {
+            "x": "y=z",
+            "empty": ""
+          }
+        },
+        {
+          "args": [
+            "a=1\na=2"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "=v"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "oops"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "json-pointer",
+      "category": "parsing",
+      "prompt": "Implement solve(document, pointer). Resolve an RFC6901-style pointer in JSON. Empty pointer returns document. Decode ~1 as / and ~0 as ~ in each component; reject other ~ escapes. Object lookup uses exact string keys; arrays use canonical nonnegative integer indices (0 or no leading zero). Reject invalid traversal with ValueError. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(document,pointer):\n    value=document\n    for key in pointer.split('/')[1:]: value=value[key]\n    return value\n",
+      "tests": [
+        {
+          "args": [
+            {
+              "a": [
+                2,
+                3
+              ]
+            },
+            "/a/1"
+          ],
+          "expected": 3
+        },
+        {
+          "args": [
+            {
+              "a/b": {
+                "~": 7
+              }
+            },
+            "/a~1b/~0"
+          ],
+          "expected": 7
+        },
+        {
+          "args": [
+            [
+              1
+            ],
+            ""
+          ],
+          "expected": [
+            1
+          ]
+        },
+        {
+          "args": [
+            [
+              1
+            ],
+            "/01"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            {},
+            "/~2"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            1,
+            "/a"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "version-sort",
+      "category": "parsing",
+      "prompt": "Implement solve(versions). Sort strings MAJOR.MINOR.PATCH by their three nonnegative integer components, preserving original strings and stable ties. Components must contain ASCII digits only; leading zeros are permitted. Reject anything other than exactly three components. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(versions):\n    return sorted(versions)\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              "1.10.0",
+              "1.2.9",
+              "0.9.0"
+            ]
+          ],
+          "expected": [
+            "0.9.0",
+            "1.2.9",
+            "1.10.0"
+          ]
+        },
+        {
+          "args": [
+            [
+              "01.2.3",
+              "1.2.3"
+            ]
+          ],
+          "expected": [
+            "01.2.3",
+            "1.2.3"
+          ]
+        },
+        {
+          "args": [
+            [
+              "1.2"
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1.-2.3"
+            ]
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "run-length-decode",
+      "category": "parsing",
+      "prompt": "Implement solve(pairs). Expand [text,count] pairs by repeating each text count times and concatenating. Count must be a nonnegative integer (bool is invalid). Reject total decoded character length above 10000 before allocation. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(pairs):\n    return ''.join(text for text,count in pairs)\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": ""
+        },
+        {
+          "args": [
+            [
+              [
+                "ab",
+                2
+              ],
+              [
+                "x",
+                0
+              ],
+              [
+                "ü",
+                1
+              ]
+            ]
+          ],
+          "expected": "ababü"
+        },
+        {
+          "args": [
+            [
+              [
+                "a",
+                -1
+              ]
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              [
+                "a",
+                true
+              ]
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              [
+                "ab",
+                5001
+              ]
+            ]
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "duration-seconds",
+      "category": "parsing",
+      "prompt": "Implement solve(text). Parse a nonempty sequence of ASCII nonnegative integers followed by h, m or s, with no whitespace. Each unit may occur at most once; order is arbitrary. Return total seconds. Reject any unmatched text or duplicate unit. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return int(text[:-1])\n",
+      "tests": [
+        {
+          "args": [
+            "2h3m4s"
+          ],
+          "expected": 7384
+        },
+        {
+          "args": [
+            "0s"
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "30s1m"
+          ],
+          "expected": 90
+        },
+        {
+          "args": [
+            "1h2h"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            ""
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1m junk"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "chunk-sequence",
+      "category": "collections",
+      "prompt": "Implement solve(values, size). Return consecutive list chunks, retaining a final short chunk. Size must be a positive integer; bool is invalid. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(values,size):\n    return [values[i:i+size] for i in range(0,len(values)-size+1,size)]\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            2
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              1,
+              2,
+              3
+            ],
+            2
+          ],
+          "expected": [
+            [
+              1,
+              2
+            ],
+            [
+              3
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              1
+            ],
+            4
+          ],
+          "expected": [
+            [
+              1
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              1
+            ],
+            0
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              1
+            ],
+            true
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "rotate-sequence",
+      "category": "collections",
+      "prompt": "Implement solve(values, distance). Return a new list rotated right by integer distance; negative means left. Empty input returns []. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(values,distance):\n    return values[distance:]+values[:distance]\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            2
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              1,
+              2,
+              3
+            ],
+            1
+          ],
+          "expected": [
+            3,
+            1,
+            2
+          ]
+        },
+        {
+          "args": [
+            [
+              1,
+              2,
+              3
+            ],
+            -1
+          ],
+          "expected": [
+            2,
+            3,
+            1
+          ]
+        },
+        {
+          "args": [
+            [
+              1,
+              2
+            ],
+            6
+          ],
+          "expected": [
+            1,
+            2
+          ]
+        },
+        {
+          "args": [
+            [
+              1,
+              2
+            ],
+            0
+          ],
+          "expected": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "frequency-table",
+      "category": "collections",
+      "prompt": "Implement solve(values). Return [value,count] rows in first-appearance order using equality semantics, including unhashable JSON values. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(values):\n    return [[x,values.count(x)] for x in values]\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              "b",
+              "a",
+              "b"
+            ]
+          ],
+          "expected": [
+            [
+              "b",
+              2
+            ],
+            [
+              "a",
+              1
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                1
+              ],
+              [
+                1
+              ],
+              []
+            ]
+          ],
+          "expected": [
+            [
+              [
+                1
+              ],
+              2
+            ],
+            [
+              [],
+              1
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              null,
+              false,
+              null
+            ]
+          ],
+          "expected": [
+            [
+              null,
+              2
+            ],
+            [
+              false,
+              1
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              {
+                "x": 1
+              },
+              {
+                "x": 1
+              }
+            ]
+          ],
+          "expected": [
+            [
+              {
+                "x": 1
+              },
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "invert-multimap",
+      "category": "collections",
+      "prompt": "Implement solve(mapping). Input maps string keys to lists of string values. Return a mapping from each value to distinct original keys in input-key order. Repeated value within one key contributes that key once. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(mapping):\n    return {v:[k] for k,values in mapping.items() for v in values}\n",
+      "tests": [
+        {
+          "args": [
+            {}
+          ],
+          "expected": {}
+        },
+        {
+          "args": [
+            {
+              "a": [
+                "x"
+              ],
+              "b": [
+                "x",
+                "y"
+              ]
+            }
+          ],
+          "expected": {
+            "x": [
+              "a",
+              "b"
+            ],
+            "y": [
+              "b"
+            ]
+          }
+        },
+        {
+          "args": [
+            {
+              "a": [
+                "x",
+                "x"
+              ]
+            }
+          ],
+          "expected": {
+            "x": [
+              "a"
+            ]
+          }
+        },
+        {
+          "args": [
+            {
+              "a": [],
+              "b": [
+                ""
+              ]
+            }
+          ],
+          "expected": {
+            "": [
+              "b"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "flatten-lists",
+      "category": "collections",
+      "prompt": "Implement solve(value). Recursively flatten nested lists only. Treat every other JSON value, including dictionaries, as one scalar item. Return a list. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(value):\n    return [item for group in value for item in group]\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              1,
+              [
+                2,
+                [
+                  3
+                ]
+              ],
+              []
+            ]
+          ],
+          "expected": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "args": [
+            {
+              "a": [
+                1
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "a": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "args": [
+            [
+              null,
+              false,
+              "x"
+            ]
+          ],
+          "expected": [
+            null,
+            false,
+            "x"
+          ]
+        },
+        {
+          "args": [
+            4
+          ],
+          "expected": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transpose-ragged",
+      "category": "collections",
+      "prompt": "Implement solve(rows, fill). Transpose ragged list rows through the longest row, filling missing cells with fill. Empty input or all-empty rows returns []. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(rows,fill):\n    return [list(column) for column in zip(*rows)]\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            null
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                2
+              ],
+              [
+                3
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              0
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [],
+              []
+            ],
+            "x"
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              [],
+              [
+                1
+              ]
+            ],
+            null
+          ],
+          "expected": [
+            [
+              null,
+              1
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            [
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consecutive-groups",
+      "category": "collections",
+      "prompt": "Implement solve(values). Group adjacent equal values into lists. Equal values separated by another value form separate groups. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(values):\n    return [[value for value in values if value==key] for key in dict.fromkeys(values)]\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              1,
+              1,
+              2,
+              1
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              1
+            ],
+            [
+              2
+            ],
+            [
+              1
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              "a",
+              "b",
+              "b"
+            ]
+          ],
+          "expected": [
+            [
+              "a"
+            ],
+            [
+              "b",
+              "b"
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                1
+              ],
+              [
+                1
+              ],
+              []
+            ]
+          ],
+          "expected": [
+            [
+              [
+                1
+              ],
+              [
+                1
+              ]
+            ],
+            [
+              []
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stable-difference",
+      "category": "collections",
+      "prompt": "Implement solve(left, right). Return items from left unequal to every item in right, retaining duplicates and order. Inputs may contain unhashable JSON values. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(left,right):\n    return sorted(set(left)-set(right))\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              3,
+              1,
+              3,
+              2
+            ],
+            [
+              2
+            ]
+          ],
+          "expected": [
+            3,
+            1,
+            3
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                1
+              ]
+            ],
+            [
+              [
+                1
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              2
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              null,
+              false
+            ],
+            []
+          ],
+          "expected": [
+            null,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deep-merge",
+      "category": "collections",
+      "prompt": "Implement solve(left, right). Return a recursive copy: when both values are dictionaries, merge keys recursively; otherwise right replaces left (lists replace, never concatenate). Do not mutate either argument. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(left,right):\n    return dict(left,**right)\n",
+      "tests": [
+        {
+          "args": [
+            {},
+            {}
+          ],
+          "expected": {}
+        },
+        {
+          "args": [
+            {
+              "a": {
+                "x": 1
+              }
+            },
+            {
+              "a": {
+                "y": 2
+              }
+            }
+          ],
+          "expected": {
+            "a": {
+              "x": 1,
+              "y": 2
+            }
+          }
+        },
+        {
+          "args": [
+            {
+              "a": [
+                1
+              ]
+            },
+            {
+              "a": [
+                2
+              ]
+            }
+          ],
+          "expected": {
+            "a": [
+              2
+            ]
+          }
+        },
+        {
+          "args": [
+            [
+              1
+            ],
+            null
+          ],
+          "expected": null
+        },
+        {
+          "args": [
+            {
+              "x": 1
+            },
+            {
+              "x": {}
+            }
+          ],
+          "expected": {
+            "x": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "index-records",
+      "category": "collections",
+      "prompt": "Implement solve(records, field). Return a dictionary keyed by each record's string field value. Reject missing field, non-string keys, or duplicate keys. Values are copies of complete records. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(records,field):\n    return {str(row[field]):row for row in records}\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            "id"
+          ],
+          "expected": {}
+        },
+        {
+          "args": [
+            [
+              {
+                "id": "a",
+                "n": 1
+              }
+            ],
+            "id"
+          ],
+          "expected": {
+            "a": {
+              "id": "a",
+              "n": 1
+            }
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "id": "a"
+              },
+              {
+                "id": "a"
+              }
+            ],
+            "id"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              {}
+            ],
+            "id"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              {
+                "id": 2
+              }
+            ],
+            "id"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "money-round",
+      "category": "finance",
+      "prompt": "Implement solve(amount). Parse a finite decimal string and return exactly two fractional digits, rounding ties away from zero. Reject NaN and infinities. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(amount):\n    return f'{float(amount):.2f}'\n",
+      "tests": [
+        {
+          "args": [
+            "1.005"
+          ],
+          "expected": "1.01"
+        },
+        {
+          "args": [
+            "-1.005"
+          ],
+          "expected": "-1.01"
+        },
+        {
+          "args": [
+            "0"
+          ],
+          "expected": "0.00"
+        },
+        {
+          "args": [
+            "12.999"
+          ],
+          "expected": "13.00"
+        },
+        {
+          "args": [
+            "NaN"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1234567890123456789012345678.005"
+          ],
+          "expected": "1234567890123456789012345678.01"
+        }
+      ]
+    },
+    {
+      "id": "invoice-discount",
+      "category": "finance",
+      "prompt": "Implement solve(amounts, percent). Sum finite nonnegative decimal amount strings, then apply a decimal percentage discount in [0,100]. Round the final total to two digits half away from zero. Reject negative/nonfinite amounts or invalid percentage. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(amounts,percent):\n    return str(sum(float(x) for x in amounts)-float(percent))\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            "10"
+          ],
+          "expected": "0.00"
+        },
+        {
+          "args": [
+            [
+              "10",
+              "20"
+            ],
+            "10"
+          ],
+          "expected": "27.00"
+        },
+        {
+          "args": [
+            [
+              "0.05"
+            ],
+            "50"
+          ],
+          "expected": "0.03"
+        },
+        {
+          "args": [
+            [
+              "-1"
+            ],
+            "0"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1"
+            ],
+            "101"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1234567890123456789012345678.005"
+            ],
+            "0"
+          ],
+          "expected": "1234567890123456789012345678.01"
+        }
+      ]
+    },
+    {
+      "id": "split-cents",
+      "category": "finance",
+      "prompt": "Implement solve(total, people). Split a nonnegative integer number of cents among a positive integer number of people. Return integer allocations differing by at most one; earliest people get the remainder cents. Reject bool and invalid bounds. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(total,people):\n    return [total//people]*people\n",
+      "tests": [
+        {
+          "args": [
+            10,
+            3
+          ],
+          "expected": [
+            4,
+            3,
+            3
+          ]
+        },
+        {
+          "args": [
+            0,
+            2
+          ],
+          "expected": [
+            0,
+            0
+          ]
+        },
+        {
+          "args": [
+            2,
+            4
+          ],
+          "expected": [
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "args": [
+            -1,
+            2
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            3,
+            0
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            true,
+            2
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "compound-balance",
+      "category": "finance",
+      "prompt": "Implement solve(principal, percent, periods). Compute principal*(1+percent/100)**periods using decimal strings. Principal must be finite nonnegative, percent finite and >=-100, periods a nonnegative integer (not bool). Round once at end to two fractional digits half away from zero. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(principal,percent,periods):\n    return f'{float(principal)*(1+float(percent)*periods/100):.2f}'\n",
+      "tests": [
+        {
+          "args": [
+            "100",
+            "10",
+            2
+          ],
+          "expected": "121.00"
+        },
+        {
+          "args": [
+            "12.345",
+            "0",
+            0
+          ],
+          "expected": "12.35"
+        },
+        {
+          "args": [
+            "100",
+            "-100",
+            1
+          ],
+          "expected": "0.00"
+        },
+        {
+          "args": [
+            "-1",
+            "2",
+            1
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1",
+            "2",
+            -1
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1234567890123456789012345678.005",
+            "0",
+            100
+          ],
+          "expected": "1234567890123456789012345678.01"
+        }
+      ]
+    },
+    {
+      "id": "fx-conversion",
+      "category": "finance",
+      "prompt": "Implement solve(amounts, rate). Multiply each finite decimal amount by a strictly positive finite decimal exchange rate. Return two-digit decimal strings, rounding each conversion half away from zero. Negative amounts are allowed. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(amounts,rate):\n    return [str(float(v)+float(rate)) for v in amounts]\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            "2"
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              "1",
+              "-2"
+            ],
+            "1.5"
+          ],
+          "expected": [
+            "1.50",
+            "-3.00"
+          ]
+        },
+        {
+          "args": [
+            [
+              "0.005"
+            ],
+            "1"
+          ],
+          "expected": [
+            "0.01"
+          ]
+        },
+        {
+          "args": [
+            [
+              "1"
+            ],
+            "0"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "Infinity"
+            ],
+            "1"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1234567890123456789012345678.005"
+            ],
+            "1"
+          ],
+          "expected": [
+            "1234567890123456789012345678.01"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "marginal-tax",
+      "category": "finance",
+      "prompt": "Implement solve(income). Compute tax on a nonnegative finite decimal income: first 10000 at 0%, next 20000 at 10%, excess at 20%. Return two fractional digits, rounded half away from zero. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(income):\n    return f'{float(income)*0.2:.2f}'\n",
+      "tests": [
+        {
+          "args": [
+            "10000"
+          ],
+          "expected": "0.00"
+        },
+        {
+          "args": [
+            "20000"
+          ],
+          "expected": "1000.00"
+        },
+        {
+          "args": [
+            "40000"
+          ],
+          "expected": "4000.00"
+        },
+        {
+          "args": [
+            "30000.025"
+          ],
+          "expected": "2000.01"
+        },
+        {
+          "args": [
+            "-1"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1234567890123456789012345678"
+          ],
+          "expected": "246913578024691357802465135.60"
+        }
+      ]
+    },
+    {
+      "id": "refund-balance",
+      "category": "finance",
+      "prompt": "Implement solve(charges, refunds). Charges/refunds are lists of nonnegative integer cents (not bool). Return sum(charges)-sum(refunds). Reject negative balance, negative entries or noninteger entries. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(charges,refunds):\n    return sum(charges)+sum(refunds)\n",
+      "tests": [
+        {
+          "args": [
+            [],
+            []
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            [
+              100,
+              20
+            ],
+            [
+              15
+            ]
+          ],
+          "expected": 105
+        },
+        {
+          "args": [
+            [
+              10
+            ],
+            [
+              10
+            ]
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            [
+              10
+            ],
+            [
+              11
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              -1
+            ],
+            []
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              true
+            ],
+            []
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "weighted-price",
+      "category": "finance",
+      "prompt": "Implement solve(prices, weights). Return weighted mean of finite decimal price strings using same-length nonnegative integer weights (not bool), formatted to two digits half away from zero. Require positive total weight. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(prices,weights):\n    return f'{sum(float(x) for x in prices)/len(prices):.2f}'\n",
+      "tests": [
+        {
+          "args": [
+            [
+              "10",
+              "20"
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "expected": "17.50"
+        },
+        {
+          "args": [
+            [
+              "1.005"
+            ],
+            [
+              1
+            ]
+          ],
+          "expected": "1.01"
+        },
+        {
+          "args": [
+            [
+              "100",
+              "2"
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "expected": "2.00"
+        },
+        {
+          "args": [
+            [],
+            []
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1"
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1"
+            ],
+            [
+              -1
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [
+              "1234567890123456789012345678.005"
+            ],
+            [
+              1
+            ]
+          ],
+          "expected": "1234567890123456789012345678.01"
+        }
+      ]
+    },
+    {
+      "id": "percent-change",
+      "category": "finance",
+      "prompt": "Implement solve(old, new). Return (new-old)/abs(old)*100 as a decimal string with two fractional digits, rounding ties away from zero. Inputs finite decimal strings; old cannot be zero. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments. Graded decimal strings use ordinary notation with at most 40 integer digits and 40 fractional digits; compound periods are at most 100.",
+      "source": "def solve(old,new):\n    return f'{(float(new)-float(old))/float(old)*100:.2f}'\n",
+      "tests": [
+        {
+          "args": [
+            "100",
+            "125"
+          ],
+          "expected": "25.00"
+        },
+        {
+          "args": [
+            "100",
+            "50"
+          ],
+          "expected": "-50.00"
+        },
+        {
+          "args": [
+            "-100",
+            "-50"
+          ],
+          "expected": "50.00"
+        },
+        {
+          "args": [
+            "3",
+            "4"
+          ],
+          "expected": "33.33"
+        },
+        {
+          "args": [
+            "0",
+            "1"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "0.0000000000000000000000000000000000000001",
+            "1"
+          ],
+          "expected": "999999999999999999999999999999999999999900.00"
+        }
+      ]
+    },
+    {
+      "id": "cashflow-ledger",
+      "category": "finance",
+      "prompt": "Implement solve(opening, movements). Opening and movements are integer cents (bool invalid). Return balances after each movement. Opening and every intermediate balance must be nonnegative; reject an overdraft immediately. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(opening,movements):\n    return [opening+value for value in movements]\n",
+      "tests": [
+        {
+          "args": [
+            0,
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            10,
+            [
+              5,
+              -3,
+              -12
+            ]
+          ],
+          "expected": [
+            15,
+            12,
+            0
+          ]
+        },
+        {
+          "args": [
+            0,
+            [
+              0
+            ]
+          ],
+          "expected": [
+            0
+          ]
+        },
+        {
+          "args": [
+            2,
+            [
+              -3,
+              5
+            ]
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            -1,
+            []
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            0,
+            [
+              true
+            ]
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "leap-year",
+      "category": "dates",
+      "prompt": "Implement solve(year). Return whether integer year in [1,9999] is a Gregorian leap year. Reject bool and out-of-range values. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(year):\n    return year%4==0\n",
+      "tests": [
+        {
+          "args": [
+            2000
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            1900
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            2024
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            2023
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            0
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            true
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "business-days",
+      "category": "dates",
+      "prompt": "Implement solve(start, end). Inputs are ISO YYYY-MM-DD dates. Count Monday-Friday dates in inclusive [start,end], with no holidays. Reject end before start or invalid dates. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "from datetime import date\ndef solve(start,end):\n    return (date.fromisoformat(end)-date.fromisoformat(start)).days\n",
+      "tests": [
+        {
+          "args": [
+            "2026-10-23",
+            "2026-10-26"
+          ],
+          "expected": 2
+        },
+        {
+          "args": [
+            "2026-10-24",
+            "2026-10-25"
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "2026-10-26",
+            "2026-10-26"
+          ],
+          "expected": 1
+        },
+        {
+          "args": [
+            "2026-10-27",
+            "2026-10-26"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "2026-02-30",
+            "2026-03-01"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "9999-12-31",
+            "9999-12-31"
+          ],
+          "expected": 1
+        }
+      ]
+    },
+    {
+      "id": "month-last-day",
+      "category": "dates",
+      "prompt": "Implement solve(day). Return the ISO date of the last day in the same month as the input ISO date. Support years 1..9999. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(day):\n    return day[:8]+'31'\n",
+      "tests": [
+        {
+          "args": [
+            "2024-02-10"
+          ],
+          "expected": "2024-02-29"
+        },
+        {
+          "args": [
+            "2023-02-01"
+          ],
+          "expected": "2023-02-28"
+        },
+        {
+          "args": [
+            "2026-04-02"
+          ],
+          "expected": "2026-04-30"
+        },
+        {
+          "args": [
+            "9999-12-01"
+          ],
+          "expected": "9999-12-31"
+        },
+        {
+          "args": [
+            "invalid"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "add-calendar-months",
+      "category": "dates",
+      "prompt": "Implement solve(day, months). Add integer months to ISO date, clamping the day to the destination month's final day. Negative months allowed. Reject destination outside years 1..9999 or noninteger/bool months. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "from datetime import date,timedelta\ndef solve(day,months):\n    return (date.fromisoformat(day)+timedelta(days=30*months)).isoformat()\n",
+      "tests": [
+        {
+          "args": [
+            "2024-01-31",
+            1
+          ],
+          "expected": "2024-02-29"
+        },
+        {
+          "args": [
+            "2023-03-31",
+            -1
+          ],
+          "expected": "2023-02-28"
+        },
+        {
+          "args": [
+            "2026-12-15",
+            2
+          ],
+          "expected": "2027-02-15"
+        },
+        {
+          "args": [
+            "2026-10-28",
+            0
+          ],
+          "expected": "2026-10-28"
+        },
+        {
+          "args": [
+            "9999-12-01",
+            1
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "2026-01-01",
+            true
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "utc-normalize",
+      "category": "dates",
+      "prompt": "Implement solve(timestamp). Parse an ISO datetime with Z or an explicit timezone offset and return UTC as YYYY-MM-DDTHH:MM:SSZ (discard fractional seconds). Reject naive or invalid timestamps. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(timestamp):\n    return timestamp.replace('+00:00','Z')\n",
+      "tests": [
+        {
+          "args": [
+            "2026-01-01T01:30:00+02:00"
+          ],
+          "expected": "2025-12-31T23:30:00Z"
+        },
+        {
+          "args": [
+            "2026-01-01T00:00:00Z"
+          ],
+          "expected": "2026-01-01T00:00:00Z"
+        },
+        {
+          "args": [
+            "2026-01-01T00:00:00.999-01:00"
+          ],
+          "expected": "2026-01-01T01:00:00Z"
+        },
+        {
+          "args": [
+            "2026-01-01T00:00:00"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "invalid"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "overlap-minutes",
+      "category": "dates",
+      "prompt": "Implement solve(a_start, a_end, b_start, b_end). Each input is an integer minute on a shared timeline. Return the nonnegative duration of intersection of half-open intervals [start,end). Reject reversed intervals. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(a_start,a_end,b_start,b_end):\n    return min(a_end,b_end)-max(a_start,b_start)\n",
+      "tests": [
+        {
+          "args": [
+            0,
+            10,
+            5,
+            15
+          ],
+          "expected": 5
+        },
+        {
+          "args": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            0,
+            5,
+            5,
+            10
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            2,
+            2,
+            0,
+            5
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            3,
+            2,
+            0,
+            5
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "date-range",
+      "category": "dates",
+      "prompt": "Implement solve(start, end, step). Return ISO dates from start through end inclusive, moving forward step days. Require positive integer step (bool invalid) and end>=start. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "from datetime import date,timedelta\ndef solve(start,end,step):\n    a,b=date.fromisoformat(start),date.fromisoformat(end)\n    return [(a+timedelta(days=i)).isoformat() for i in range((b-a).days)]\n",
+      "tests": [
+        {
+          "args": [
+            "2024-02-28",
+            "2024-03-02",
+            2
+          ],
+          "expected": [
+            "2024-02-28",
+            "2024-03-01"
+          ]
+        },
+        {
+          "args": [
+            "2026-01-01",
+            "2026-01-01",
+            3
+          ],
+          "expected": [
+            "2026-01-01"
+          ]
+        },
+        {
+          "args": [
+            "2026-01-01",
+            "2026-01-03",
+            1
+          ],
+          "expected": [
+            "2026-01-01",
+            "2026-01-02",
+            "2026-01-03"
+          ]
+        },
+        {
+          "args": [
+            "2026-01-02",
+            "2026-01-01",
+            1
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "2026-01-01",
+            "2026-01-01",
+            0
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "iso-week",
+      "category": "dates",
+      "prompt": "Implement solve(day). Return [ISO week-year, week number, ISO weekday 1..7] for an ISO date. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "from datetime import date\ndef solve(day):\n    value=date.fromisoformat(day)\n    return [value.year,int(value.strftime('%W')),value.weekday()]\n",
+      "tests": [
+        {
+          "args": [
+            "2021-01-01"
+          ],
+          "expected": [
+            2020,
+            53,
+            5
+          ]
+        },
+        {
+          "args": [
+            "2021-01-04"
+          ],
+          "expected": [
+            2021,
+            1,
+            1
+          ]
+        },
+        {
+          "args": [
+            "2026-10-28"
+          ],
+          "expected": [
+            2026,
+            44,
+            3
+          ]
+        },
+        {
+          "args": [
+            "2020-12-31"
+          ],
+          "expected": [
+            2020,
+            53,
+            4
+          ]
+        },
+        {
+          "args": [
+            "no"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "elapsed-seconds",
+      "category": "dates",
+      "prompt": "Implement solve(start, end). Both strings are ISO datetimes with Z or explicit offset. Return integer elapsed seconds end-start, including negative durations; inputs have second precision. Reject naive timestamps. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "from datetime import datetime\ndef solve(start,end):\n    return (datetime.fromisoformat(end.replace('Z','+00:00'))-datetime.fromisoformat(start.replace('Z','+00:00'))).seconds\n",
+      "tests": [
+        {
+          "args": [
+            "2026-01-01T00:00:00Z",
+            "2026-01-02T00:00:01Z"
+          ],
+          "expected": 86401
+        },
+        {
+          "args": [
+            "2026-01-01T00:00:10Z",
+            "2026-01-01T00:00:00Z"
+          ],
+          "expected": -10
+        },
+        {
+          "args": [
+            "2026-01-01T01:00:00+01:00",
+            "2026-01-01T00:00:00Z"
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "2026-01-01T00:00:00",
+            "2026-01-01T00:00:00Z"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "quarter-bounds",
+      "category": "dates",
+      "prompt": "Implement solve(day). Return [first ISO date,last ISO date] of the calendar quarter containing input ISO date. Support year 9999. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(day):\n    return [day[:4]+'-01-01',day[:4]+'-12-31']\n",
+      "tests": [
+        {
+          "args": [
+            "2024-02-29"
+          ],
+          "expected": [
+            "2024-01-01",
+            "2024-03-31"
+          ]
+        },
+        {
+          "args": [
+            "2026-04-01"
+          ],
+          "expected": [
+            "2026-04-01",
+            "2026-06-30"
+          ]
+        },
+        {
+          "args": [
+            "2026-09-30"
+          ],
+          "expected": [
+            "2026-07-01",
+            "2026-09-30"
+          ]
+        },
+        {
+          "args": [
+            "9999-12-31"
+          ],
+          "expected": [
+            "9999-10-01",
+            "9999-12-31"
+          ]
+        },
+        {
+          "args": [
+            "bad"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "ascii-identifier",
+      "category": "security",
+      "prompt": "Implement solve(text). Return whether text matches ASCII identifier [A-Za-z_][A-Za-z0-9_]* and is at most 32 characters. Reject empty, Unicode letters and whitespace by returning false. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return text.isidentifier()\n",
+      "tests": [
+        {
+          "args": [
+            "abc_2"
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "_"
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "é"
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            "1a"
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            ""
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "redirect-target",
+      "category": "security",
+      "prompt": "Implement solve(text). Accept only a local redirect path starting with exactly one forward slash. Return text unchanged if valid; otherwise raise ValueError. Reject backslashes, ASCII controls (U+0000..U+001F and U+007F), and percent-encoded slash or backslash (%2f/%5c case-insensitive) anywhere. A query/fragment is allowed. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    if not text.startswith('/'): raise ValueError('relative required')\n    return text\n",
+      "tests": [
+        {
+          "args": [
+            "/account?next=x#top"
+          ],
+          "expected": "/account?next=x#top"
+        },
+        {
+          "args": [
+            "//evil.example"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "/a\\b"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "/a%2Fb"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "/a\nb"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "https://example"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "redact-headers",
+      "category": "security",
+      "prompt": "Implement solve(headers). Return copied header mapping, replacing case-insensitive exact Authorization, Cookie and X-Api-Key header values with [REDACTED]. Preserve keys/case and other values. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(headers):\n    return {key:('[REDACTED]' if key=='Authorization' else value) for key,value in headers.items()}\n",
+      "tests": [
+        {
+          "args": [
+            {}
+          ],
+          "expected": {}
+        },
+        {
+          "args": [
+            {
+              "authorization": "secret",
+              "X": "ok"
+            }
+          ],
+          "expected": {
+            "authorization": "[REDACTED]",
+            "X": "ok"
+          }
+        },
+        {
+          "args": [
+            {
+              "COOKIE": "s",
+              "X-Api-Key": "k"
+            }
+          ],
+          "expected": {
+            "COOKIE": "[REDACTED]",
+            "X-Api-Key": "[REDACTED]"
+          }
+        },
+        {
+          "args": [
+            {
+              "Authorization-Type": "x",
+              "cookie_count": 2
+            }
+          ],
+          "expected": {
+            "Authorization-Type": "x",
+            "cookie_count": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "allowed-action",
+      "category": "security",
+      "prompt": "Implement solve(action, allowed). Return true only if action is a string exactly equal to an entry in allowed. No lowercasing, trimming, prefix or wildcard expansion. Entries that are not strings never authorize an action. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(action,allowed):\n    return any(str(action).lower().startswith(str(item).lower()) for item in allowed)\n",
+      "tests": [
+        {
+          "args": [
+            "read",
+            [
+              "read",
+              "write"
+            ]
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "reader",
+            [
+              "read"
+            ]
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            "READ",
+            [
+              "read"
+            ]
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            " read",
+            [
+              "read"
+            ]
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            1,
+            [
+              "1",
+              1
+            ]
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            "read",
+            [
+              "*"
+            ]
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "parse-port",
+      "category": "security",
+      "prompt": "Implement solve(text). Parse a canonical ASCII decimal TCP port 1..65535. No whitespace, plus sign, Unicode digits or leading zeros. Return int or raise ValueError. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return int(text)\n",
+      "tests": [
+        {
+          "args": [
+            "443"
+          ],
+          "expected": 443
+        },
+        {
+          "args": [
+            "65535"
+          ],
+          "expected": 65535
+        },
+        {
+          "args": [
+            "0"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "65536"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "080"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            " 80"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "８０"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "safe-filename",
+      "category": "security",
+      "prompt": "Implement solve(text). Return a filename unchanged if 1..64 characters and consists only of ASCII letters/digits, dot, underscore or hyphen. Reject . or .., names beginning with dot, and Windows reserved stem names CON, PRN, AUX, NUL, COM1..COM9, LPT1..LPT9 case-insensitively before first dot. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return text.replace('/','_')\n",
+      "tests": [
+        {
+          "args": [
+            "report-1.txt"
+          ],
+          "expected": "report-1.txt"
+        },
+        {
+          "args": [
+            "a_b"
+          ],
+          "expected": "a_b"
+        },
+        {
+          "args": [
+            "../x"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "CON.txt"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            ".hidden"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "é.txt"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "permission-bits",
+      "category": "security",
+      "prompt": "Implement solve(mode). Parse exactly three octal digits as POSIX permission bits. Return {owner:[read,write,execute],group:[...],other:[...]} booleans. Reject other strings. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(mode):\n    return {name:[True,True,True] for name in ['owner','group','other']}\n",
+      "tests": [
+        {
+          "args": [
+            "640"
+          ],
+          "expected": {
+            "owner": [
+              true,
+              true,
+              false
+            ],
+            "group": [
+              true,
+              false,
+              false
+            ],
+            "other": [
+              false,
+              false,
+              false
+            ]
+          }
+        },
+        {
+          "args": [
+            "000"
+          ],
+          "expected": {
+            "owner": [
+              false,
+              false,
+              false
+            ],
+            "group": [
+              false,
+              false,
+              false
+            ],
+            "other": [
+              false,
+              false,
+              false
+            ]
+          }
+        },
+        {
+          "args": [
+            "777"
+          ],
+          "expected": {
+            "owner": [
+              true,
+              true,
+              true
+            ],
+            "group": [
+              true,
+              true,
+              true
+            ],
+            "other": [
+              true,
+              true,
+              true
+            ]
+          }
+        },
+        {
+          "args": [
+            "888"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "0755"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "ipv4-number",
+      "category": "security",
+      "prompt": "Implement solve(address). Parse exactly four canonical ASCII decimal octets 0..255 separated by dots (no leading zeros except 0). Return their 32-bit unsigned integer. Reject invalid syntax. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(address):\n    return sum(int(part) for part in address.split('.'))\n",
+      "tests": [
+        {
+          "args": [
+            "0.0.0.0"
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "127.0.0.1"
+          ],
+          "expected": 2130706433
+        },
+        {
+          "args": [
+            "255.255.255.255"
+          ],
+          "expected": 4294967295
+        },
+        {
+          "args": [
+            "01.2.3.4"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "256.0.0.1"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "1.2.3"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "limit-json-depth",
+      "category": "security",
+      "prompt": "Implement solve(value, max_depth). Return a deep copy of JSON value if container nesting depth <= max_depth. Scalars have depth 0; empty/nonempty dict/list has depth 1 + maximum child-container depth (empty max is 0). Reject negative/noninteger/bool limit or exceeding depth with ValueError. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(value,max_depth):\n    return value\n",
+      "tests": [
+        {
+          "args": [
+            1,
+            0
+          ],
+          "expected": 1
+        },
+        {
+          "args": [
+            [],
+            1
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            {
+              "a": [
+                1
+              ]
+            },
+            2
+          ],
+          "expected": {
+            "a": [
+              1
+            ]
+          }
+        },
+        {
+          "args": [
+            {
+              "a": [
+                1
+              ]
+            },
+            1
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            [],
+            0
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            1,
+            true
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "duplicate-json-keys",
+      "category": "security",
+      "prompt": "Implement solve(text). Parse strict JSON and reject duplicate object keys at every depth and nonfinite constants (NaN, Infinity, -Infinity) with ValueError. Otherwise return parsed JSON. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "import json\ndef solve(text):\n    return json.loads(text)\n",
+      "tests": [
+        {
+          "args": [
+            "{\"a\":1,\"b\":[2]}"
+          ],
+          "expected": {
+            "a": 1,
+            "b": [
+              2
+            ]
+          }
+        },
+        {
+          "args": [
+            "null"
+          ],
+          "expected": null
+        },
+        {
+          "args": [
+            "{\"a\":1,\"a\":2}"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "{\"x\":{\"a\":1,\"a\":2}}"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "NaN"
+          ],
+          "raises": "ValueError"
+        },
+        {
+          "args": [
+            "{bad}"
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "edit-distance",
+      "category": "text",
+      "prompt": "Implement solve(left, right). Return Levenshtein distance on Unicode code points, with insert/delete/substitute each costing one. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(left,right):\n    return abs(len(left)-len(right))\n",
+      "tests": [
+        {
+          "args": [
+            "",
+            ""
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "kitten",
+            "sitting"
+          ],
+          "expected": 3
+        },
+        {
+          "args": [
+            "ab",
+            "ba"
+          ],
+          "expected": 2
+        },
+        {
+          "args": [
+            "é",
+            "e"
+          ],
+          "expected": 1
+        },
+        {
+          "args": [
+            "",
+            "abc"
+          ],
+          "expected": 3
+        }
+      ]
+    },
+    {
+      "id": "unicode-palindrome",
+      "category": "text",
+      "prompt": "Implement solve(text). Casefold text, keep only Unicode alphanumeric characters, and return whether the result reads the same backward. Empty normalized text counts as true. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return text==text[::-1]\n",
+      "tests": [
+        {
+          "args": [
+            "A man, a plan, a canal: Panama!"
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "No lemon, no melon"
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "ab"
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            "!!!"
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "Üxü"
+          ],
+          "expected": true
+        }
+      ]
+    },
+    {
+      "id": "camel-to-snake",
+      "category": "text",
+      "prompt": "Implement solve(text). Convert ASCII CamelCase to lowercase snake_case. Split before an uppercase letter preceded by lowercase/digit, and before the last capital of an acronym when followed by lowercase. Preserve existing underscores. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return ''.join('_'+c.lower() if c.isupper() else c for c in text).lstrip('_')\n",
+      "tests": [
+        {
+          "args": [
+            "HTTPServer"
+          ],
+          "expected": "http_server"
+        },
+        {
+          "args": [
+            "myURLValue"
+          ],
+          "expected": "my_url_value"
+        },
+        {
+          "args": [
+            "x2Value"
+          ],
+          "expected": "x2_value"
+        },
+        {
+          "args": [
+            "already_snake"
+          ],
+          "expected": "already_snake"
+        },
+        {
+          "args": [
+            ""
+          ],
+          "expected": ""
+        }
+      ]
+    },
+    {
+      "id": "normalize-lines",
+      "category": "text",
+      "prompt": "Implement solve(text). Normalize CRLF and bare CR to LF, preserving all other characters and the number of trailing line breaks. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return '\\n'.join(text.splitlines())\n",
+      "tests": [
+        {
+          "args": [
+            ""
+          ],
+          "expected": ""
+        },
+        {
+          "args": [
+            "a\r\nb\rc\n"
+          ],
+          "expected": "a\nb\nc\n"
+        },
+        {
+          "args": [
+            "a\n\n"
+          ],
+          "expected": "a\n\n"
+        },
+        {
+          "args": [
+            "x y"
+          ],
+          "expected": "x y"
+        },
+        {
+          "args": [
+            "\r\r\n"
+          ],
+          "expected": "\n\n"
+        }
+      ]
+    },
+    {
+      "id": "wrap-words",
+      "category": "text",
+      "prompt": "Implement solve(text, width). Split text on whitespace and greedily pack words into lines separated by one ASCII space with length<=width. Long words stay intact on their own line. Return list of lines; positive integer width required (bool invalid). Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text,width):\n    return [text[i:i+width] for i in range(0,len(text),width)]\n",
+      "tests": [
+        {
+          "args": [
+            "",
+            4
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            "one two three",
+            7
+          ],
+          "expected": [
+            "one two",
+            "three"
+          ]
+        },
+        {
+          "args": [
+            "a   b\nc",
+            3
+          ],
+          "expected": [
+            "a b",
+            "c"
+          ]
+        },
+        {
+          "args": [
+            "longword x",
+            3
+          ],
+          "expected": [
+            "longword",
+            "x"
+          ]
+        },
+        {
+          "args": [
+            "abc",
+            0
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "common-prefix",
+      "category": "text",
+      "prompt": "Implement solve(values). Return the longest case-sensitive Unicode codepoint prefix shared by all strings. Empty list returns empty string. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(values):\n    return values[0] if values else ''\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": ""
+        },
+        {
+          "args": [
+            [
+              "flower",
+              "flow",
+              "flight"
+            ]
+          ],
+          "expected": "fl"
+        },
+        {
+          "args": [
+            [
+              "üa",
+              "üb"
+            ]
+          ],
+          "expected": "ü"
+        },
+        {
+          "args": [
+            [
+              "abc",
+              ""
+            ]
+          ],
+          "expected": ""
+        },
+        {
+          "args": [
+            [
+              "same",
+              "same"
+            ]
+          ],
+          "expected": "same"
+        }
+      ]
+    },
+    {
+      "id": "balanced-brackets",
+      "category": "text",
+      "prompt": "Implement solve(text). Return whether (), [] and {} are correctly nested and paired, ignoring all other characters. Quotes have no special meaning. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text):\n    return all(text.count(a)==text.count(b) for a,b in [('(',')'),('[',']'),('{','}')])\n",
+      "tests": [
+        {
+          "args": [
+            "a([{}])"
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "([)]"
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            ")("
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            ""
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            "[x"
+          ],
+          "expected": false
+        }
+      ]
+    },
+    {
+      "id": "anagram-groups",
+      "category": "text",
+      "prompt": "Implement solve(words). Group words that are anagrams after Unicode casefold. Preserve word order within groups and group first-appearance order. Preserve original spellings in output. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(words):\n    return [sorted(words)]\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              "eat",
+              "Tea",
+              "tan",
+              "ate",
+              "nat"
+            ]
+          ],
+          "expected": [
+            [
+              "eat",
+              "Tea",
+              "ate"
+            ],
+            [
+              "tan",
+              "nat"
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              "",
+              "a",
+              ""
+            ]
+          ],
+          "expected": [
+            [
+              "",
+              ""
+            ],
+            [
+              "a"
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              "ß",
+              "ss"
+            ]
+          ],
+          "expected": [
+            [
+              "ß",
+              "ss"
+            ]
+          ]
+        },
+        {
+          "args": [
+            [
+              "ab",
+              "a b"
+            ]
+          ],
+          "expected": [
+            [
+              "ab"
+            ],
+            [
+              "a b"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "natural-sort",
+      "category": "text",
+      "prompt": "Implement solve(values). Stable-sort strings using alternating runs of ASCII digits as integer components and nondigit runs case-sensitively. Digit runs compare numerically; equal numeric values tie stably. All input strings begin with a nondigit, and have the same alternating component pattern. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(values):\n    return sorted(values)\n",
+      "tests": [
+        {
+          "args": [
+            []
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            [
+              "file10",
+              "file2",
+              "file1"
+            ]
+          ],
+          "expected": [
+            "file1",
+            "file2",
+            "file10"
+          ]
+        },
+        {
+          "args": [
+            [
+              "a01",
+              "a1",
+              "a2"
+            ]
+          ],
+          "expected": [
+            "a01",
+            "a1",
+            "a2"
+          ]
+        },
+        {
+          "args": [
+            [
+              "v2x10",
+              "v2x2",
+              "v1x9"
+            ]
+          ],
+          "expected": [
+            "v1x9",
+            "v2x2",
+            "v2x10"
+          ]
+        },
+        {
+          "args": [
+            [
+              "A2",
+              "a1"
+            ]
+          ],
+          "expected": [
+            "A2",
+            "a1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overlapping-matches",
+      "category": "text",
+      "prompt": "Implement solve(text, needle). Return all start indices where nonempty needle occurs in text, including overlapping occurrences. Reject empty needle. Return concrete JSON-compatible values, not iterators. Do not mutate input arguments.",
+      "source": "def solve(text,needle):\n    index=text.find(needle)\n    return [index] if index>=0 else []\n",
+      "tests": [
+        {
+          "args": [
+            "aaaa",
+            "aa"
+          ],
+          "expected": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "args": [
+            "abc",
+            "x"
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            "üxü",
+            "ü"
+          ],
+          "expected": [
+            0,
+            2
+          ]
+        },
+        {
+          "args": [
+            "",
+            "a"
+          ],
+          "expected": []
+        },
+        {
+          "args": [
+            "abc",
+            ""
+          ],
+          "raises": "ValueError"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Sixty small Python functions; not sixty independent production repositories.",
+    "Reference fixtures validate the harness; model trials must be reported separately.",
+    "Expected outputs are prewritten deterministic oracles, not model self-grades."
+  ]
+}

@@ -52,8 +52,6 @@ def destination(project, host):
     target = project / LAYOUTS[host]
     if not target.resolve().is_relative_to(project):
         raise ValueError('project skill path escapes through a symlink; no global paths are modified')
-    if target.resolve() == SOURCE:
-        raise ValueError('installation destination is the source skill')
     return project, target
 
 

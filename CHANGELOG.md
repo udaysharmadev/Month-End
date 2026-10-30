@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0 — Stable portable tools (2026-10-30)
+
+- Reduced the skill entrypoint by 50.7% in bytes while retaining source integrity,
+  diagnostic fidelity, optional tooling and progressive references.
+- Added an authentic replayable terminal capture and offline player.
+- Added sixty distinct synthetic workflow tasks with 321 independent cases,
+  separate smoke/acceptance grading and a bounded explicit Gemini tool harness.
+- Published negative single-response Gemini findings instead of claiming savings.
+- Retained offline runtime behavior, reversible installation and deterministic
+  archives. Provider billing and independent external efficacy remain unverified.
+- Preserve SIGKILL termination as well as catchable child signals.
+- Allow installed integration helpers to manage their own project; prevent
+  benchmark imports from leaving unmanaged bytecode caches.
+- Reject noncanonical archive paths that alias files after extraction.
+- Share bounded candidate execution between developer evaluators, require
+  macOS isolation, and preflight outside-read/write and network restrictions
+  before requesting credentials. Reject private and wildcard import aliases.
+- Reconcile produced workflow software identities with the analysis consumer.
+- Label the sixty-task workflow study as an unexecuted protocol.
+
 ## 1.0.0-rc.1 — Complete toolset (2026-10-28)
 
 - Added AST-backed Python symbol retrieval, bounded streaming path discovery and NUL-delimited filenames.

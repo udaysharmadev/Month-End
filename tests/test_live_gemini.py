@@ -2,6 +2,7 @@
 import importlib.util
 import io
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -11,6 +12,7 @@ from pathlib import Path
 from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'scripts/live_gemini.py'
+sys.path.insert(0, str(SCRIPT.parent))
 spec = importlib.util.spec_from_file_location('live_gemini', SCRIPT)
 live = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(live)
@@ -21,6 +23,50 @@ class LiveGeminiTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(SCRIPT)], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0)
         self.assertIn('no API calls', result.stdout)
+
+    def test_execution_requires_isolation_before_credentials(self):
+        with mock.patch.object(live, 'require_sandbox', side_effect=ValueError('sandbox unavailable')), \
+                mock.patch.object(live.getpass, 'getpass') as credentials, \
+                mock.patch.object(live, 'Client') as client:
+            with self.assertRaises(SystemExit) as stopped:
+                live.main(['--execute', '--output', '/not-created'])
+            self.assertEqual(stopped.exception.code, 2)
+            credentials.assert_not_called()
+            client.assert_not_called()
+
+    def test_unsafe_import_aliases_and_annotation_evaluators_are_rejected(self):
+        for imported, expression in [
+            ('from io import FileIO as Reader', 'Reader(value).read()'),
+            ('from io import open_code as Reader', 'Reader(value).read()'),
+            ('from collections import __builtins__ as B', 'B["open"](value).read()'),
+            ('from pathlib import *', 'Path(value).exists()'),
+            ('from typing import get_type_hints as hints', 'hints(value)'),
+            ('import re._compiler as private', 'private.compile(value)'),
+        ]:
+            with self.subTest(imported=imported), self.assertRaises(ValueError):
+                live.extract_code(self.response(imported + '\ndef solve(value): return ' + expression))
+
+    @unittest.skipUnless(sys.platform == 'darwin' and shutil.which('sandbox-exec'),
+                         'generated code requires macOS isolation')
+    def test_actual_candidate_grade_uses_read_isolation_and_bounded_output(self):
+        grader = SCRIPT.parent.parent / 'benchmarks/local/grade.py'
+        code = 'import csv,io\ndef solve(text): return list(csv.reader(io.StringIO(text)))\n'
+        result = live.grade_code(code, 'quoted-csv', grader)
+        self.assertEqual(result['exit'], 0, result)
+        with tempfile.TemporaryDirectory() as temporary:
+            outside = Path(temporary) / 'synthetic.txt'
+            outside.write_text('PRIVATE_SYNTHETIC_SENTINEL')
+            # Bypass the AST heuristic deliberately to check the OS boundary itself.
+            code = 'def solve(text): return open(' + repr(str(outside)) + ').read()\n'
+            result = live.grade_code(code, 'quoted-csv', grader)
+            self.assertNotEqual(result['exit'], 0)
+            self.assertIn('PermissionError', result['stderr'])
+            self.assertNotIn('PRIVATE_SYNTHETIC_SENTINEL', json.dumps(result))
+
+    def test_candidate_grade_refuses_an_unsupported_platform(self):
+        with mock.patch('candidate_sandbox.sys.platform', 'linux'):
+            with self.assertRaisesRegex(ValueError, 'requires the macOS sandbox'):
+                live.grade_code('def solve(value): return value\n', 'unused', SCRIPT)
 
     def test_secret_only_in_header_not_url_or_body(self):
         captured = []

@@ -17,3 +17,9 @@ The runner supports external subscription/API harnesses only through explicitly
 supplied argv and supported usage exports. It never chooses paid calls or reads
 credentials. Read the [runner contract](../skills/month-end/references/benchmark.md)
 before constructing a live manifest or sharing raw artifacts.
+
+The separate [workflow suite](workflow/README.md) registers sixty distinct
+synthetic repair tasks and 321 cases for the explicit multi-turn Gemini study.
+Its smoke cases and final acceptance cases are separated in the model's tool
+filesystem. The live workflow study has not been run; see its
+[planned protocol](../docs/workflow-evaluation.md).

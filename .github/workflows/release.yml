@@ -26,4 +26,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
-        run: gh release create "$RELEASE_TAG" dist/* --verify-tag --prerelease --title "Month End $RELEASE_TAG" --notes-file docs/release-notes.md
+        run: |
+          release_options=()
+          if [[ "$RELEASE_TAG" == *-* ]]; then
+            release_options+=(--prerelease)
+          fi
+          gh release create "$RELEASE_TAG" dist/* --verify-tag "${release_options[@]}" --title "Month End $RELEASE_TAG" --notes-file docs/release-notes.md

@@ -1,5 +1,10 @@
 # Release implementation plan
 
+Historical release-candidate preparation record. The current stable completion
+pass and live API evidence are tracked in [product-status.md](product-status.md)
+and [workflow-evaluation.md](workflow-evaluation.md); statements below describe
+what ran during the original preparation workstream.
+
 Scope: build reviewable local release artifacts, verify the research register,
 and prepare truthful launch materials. External publication, real billing
 experiments and a screen recording remain separate evidence-producing actions.

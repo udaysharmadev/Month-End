@@ -409,4 +409,6 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    # Sibling imports must not add unmanaged cache files to an installed skill.
+    sys.dont_write_bytecode = True
     raise SystemExit(main())

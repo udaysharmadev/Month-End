@@ -12,6 +12,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from candidate_sandbox import bounded_subprocess, require_sandbox
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -40,6 +42,7 @@ def usage_events(raw):
 
 
 def run_pilot(output, repeats=1, timeout=150, seed=2026):
+    require_sandbox()
     executable = shutil.which('codex')
     if executable is None:
         raise ValueError('Codex is not installed')
@@ -89,16 +92,17 @@ def run_pilot(output, repeats=1, timeout=150, seed=2026):
                     stderr = 'native CLI exceeded the per-invocation timeout'
                     code, timed_out = 124, True
                 parsed = usage_events(stdout)
-                grade = subprocess.run([sys.executable, str(ROOT / 'benchmarks/local/grade.py'),
-                                        str(workspace), task['id']], capture_output=True, text=True, timeout=15)
+                grader = ROOT / 'benchmarks/local/grade.py'
+                grade = bounded_subprocess([sys.executable, '-I', str(grader), str(workspace), task['id']],
+                                           workspace, read_paths=(grader,), require_isolation=True)
                 (output / (label + '.jsonl')).write_text(stdout, encoding='utf-8')
                 (output / (label + '.stderr.txt')).write_text(stderr, encoding='utf-8')
                 shutil.copyfile(workspace / 'app.py', output / (label + '.app.py'))
                 record = {'task_id': task['id'], 'repeat': repeat, 'arm': arm,
-                          'candidate_exit': code, 'grader_exit': grade.returncode,
-                          'success': code == 0 and grade.returncode == 0, 'timed_out': timed_out,
+                          'candidate_exit': code, 'grader_exit': grade['exit'],
+                          'success': code == 0 and grade['exit'] == 0, 'timed_out': timed_out,
                           'skill_path_observed_in_trace': arm == 'month-end' and ('SKILL.md' in stdout and 'month-end' in stdout),
-                          'grade': grade.stdout.strip(), **parsed}
+                          'grade': grade['stdout'].strip(), **parsed}
                 records.append(record)
                 print(label + ': ' + ('PASS' if record['success'] else 'FAIL'), flush=True)
                 if parsed['errors'] and not parsed['completed_turns']:
@@ -130,7 +134,7 @@ def main(argv=None):
         parser.error('--execute requires a new explicit --output directory')
     try:
         result = run_pilot(args.output, repeats=args.repeats)
-    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
         print('FAIL: ' + str(error), file=sys.stderr)
         return 1
     print(json.dumps({'executed': result['executed_invocations'],
